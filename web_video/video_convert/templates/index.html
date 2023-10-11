@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div>
+    <form action="{% url 'conversion' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            {{ form }}
+        </div>
+        <button>Convert Video</button>
+    </form>
+</div>
+{% endblock %}
