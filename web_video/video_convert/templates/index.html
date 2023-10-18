@@ -5,10 +5,48 @@
 <div>
     <form action="{% url 'conversion' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div>
-            {{ form }}
+        <div class="converter-container">
+            <h1>Video converter</h1>
+            <p>Input / Output </p>
+            <div class="container-interior">
+                <div class="input">
+                    <p>Input File:</p>
+                    {{ form.input_file }}
+                </div>
+                <div class="resolution">
+                    <p>Desired output resolution:</p>
+                    {{ form.video_resolution }}
+                </div>
+            </div>
+            <p>Rate control</p>
+            <div class="container-interior">
+                <div class="controller">
+                    <p>Video rate control mode:</p>
+                    {{ form.video_mode }}
+                </div>
+                <div class="controller">
+                    <p>Video quantitizer:</p>
+                    {{ form.video_qp }}
+                    <p>QP: <span id="qp_value"></span></p>
+                </div>
+                <div class="controller">
+                    <p>Target bitrate:</p>
+                    {{ form.video_bitrate }}
+                    <p>Bitrate: <span id="bitrate_value"></span></p>
+                </div>
+                <div class="controller">
+                    <p>Audio bitrate (AAC):</p>
+                    {{ form.audio_bitrate }}
+                    <p>Bitrate: <span id="audio_value"></span></p>
+                </div>
+            </div>
+            <p>Basic Encoder Options</p>
+            <div class="container-interior">
+                <p>Video preset:</p>
+                {{ form.video_preset }}
+            </div>
+            <button>Convert Video</button>
         </div>
-        <button>Convert Video</button>
     </form>
 </div>
 {% endblock %}

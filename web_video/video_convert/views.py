@@ -17,29 +17,47 @@ AUDIO_BITRATE_INITIAL = 128
 
 
 class ConvertVideo(forms.Form):
+    widescreen_resolutions = (
+        ("-1", "Original"),
+        ("360", "360p"),
+        ("480", "480p"),
+        ("720", "720p"),
+        ("1080", "1080p"),
+        ("2160", "4K"),
+    )
     nvidia_presets = (
         ("slow", "Slow (NVENC)"),
         ("medium", "Medium (NVENC)"),
         ("fast", "Fast (NVENC)"),
     )
-    nvidia_rate_control = ("qp", "QP"), ("vbr", "VBR"), ("cbr", "CBR")
+    nvidia_rate_control = ("qp", "QP"), ("vbr", "VBR")
 
     input_file = forms.FileField()
+    video_resolution = forms.ChoiceField(choices=widescreen_resolutions)
     video_mode = forms.ChoiceField(choices=nvidia_rate_control)
     video_qp = forms.IntegerField(
-        min_value=VIDEO_QP_MIN, max_value=VIDEO_QP_MAX, initial=VIDEO_QP_INITIAL
+        min_value=VIDEO_QP_MIN,
+        max_value=VIDEO_QP_MAX,
+        initial=VIDEO_QP_INITIAL,
+        widget=forms.NumberInput(attrs={"type": "range"}),
     )
     video_bitrate = forms.IntegerField(
         min_value=VIDEO_BITRATE_MIN,
         max_value=VIDEO_BITRATE_MAX,
         initial=VIDEO_BITRATE_INITIAL,
+        widget=forms.NumberInput(attrs={"type": "range"}),
     )
     video_preset = forms.ChoiceField(choices=nvidia_presets, initial="medium")
     audio_bitrate = forms.IntegerField(
-        min_value=AUDIO_BITRATE_INITIAL,
+        min_value=AUDIO_BITRATE_MIN,
         max_value=AUDIO_BITRATE_MAX,
         initial=AUDIO_BITRATE_INITIAL,
+        widget=forms.NumberInput(attrs={"type": "range"}),
     )
+
+
+def video_render_queue():
+    ...
 
 
 def azure_upload():
@@ -56,16 +74,71 @@ def local_video_save(filename, content):
             file.write(chunk)
 
 
-def get_video_mode(mode):
-    match mode:
-        case "qp":
-            return "qp"
-        case "vbr":
-            return "vbr"
-        case "cbr":
-            return "cbr"
+def check_video_resolution_widescreen(video_resolution):
+    match video_resolution:
+        case "-1":
+            return video_resolution
+        case "360":
+            return video_resolution
+        case "480":
+            return video_resolution
+        case "720":
+            return video_resolution
+        case "1080":
+            return video_resolution
+        case "2160":
+            return video_resolution
         case _:
             raise NotImplementedError
+
+
+def check_video_value(mode, video_qp, video_bitrate):
+    match mode:
+        case "qp":
+            mode_name = "constqp"
+            mode_value = "qp"
+        case "vbr":
+            mode_name = "vbr"
+            mode_value = "b"
+        case _:
+            raise NotImplementedError
+
+    if mode_name == "constqp" and VIDEO_QP_MIN <= video_qp <= VIDEO_QP_MAX:
+        return [mode_name, mode_value, video_qp]
+    elif mode_name == "vbr" and VIDEO_BITRATE_MIN <= video_bitrate <= VIDEO_BITRATE_MAX:
+        return [mode_name, mode_value, video_bitrate * 1000]
+    else:
+        raise ValueError
+
+
+def check_audio_value(audio_bitrate):
+    if AUDIO_BITRATE_MIN <= audio_bitrate <= AUDIO_BITRATE_MAX:
+        return audio_bitrate * 1000
+    else:
+        raise ValueError
+
+
+# Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions
+def video_convert(
+    input_name, video_file, video_resolution, video_value, video_preset, audio_value
+):
+    local_video_save(f"{input_name}", video_file)
+    input = ffmpeg.input(f"uploaded_videos/{input_name}")
+    video = input.video.filter(
+        "scale", width=-1, height=check_video_resolution_widescreen(video_resolution)
+    )
+    audio = input.audio
+    ffmpeg.output(
+        video,
+        audio,
+        f"converted_videos/{input_name}_converted.mp4",
+        vcodec="h264_nvenc",
+        preset=video_preset,
+        rc=video_value[0],
+        **{video_value[1]: video_value[2]},
+        acodec="aac",
+        audio_bitrate=audio_value,
+    ).global_args("-hwaccel", "cuda", "-y").run()
 
 
 async def index(request):
@@ -77,30 +150,16 @@ async def conversion(request):
     if request.method == "POST":
         form = ConvertVideo(request.POST, request.FILES)
         if form.is_valid():
-            input_name = form.cleaned_data["input_file"]
-            video_mode = get_video_mode(form.cleaned_data["video_mode"])
-            if (
-                video_mode == "qp"
-                and VIDEO_QP_MIN <= form.cleaned_data["video_qp"] <= VIDEO_QP_MAX
-            ):
-                compression = form.cleaned_data["video_qp"]
-            elif (
-                video_mode == "vbr"
-                or "cbr"
-                and VIDEO_BITRATE_MIN
-                <= form.cleaned_data["video_bitrate"]
-                <= VIDEO_BITRATE_MAX
-            ):
-                compression = form.cleaned_data["video_bitrate"]
-
-            local_video_save(f"{input_name}", request.FILES["input_file"])
-            ffmpeg.input(f"uploaded_videos/{input_name}").output(
-                f"converted_videos/{input_name}_converted.mp4",
-                **{"c:v": "h264_nvenc"},
-                preset=form.cleaned_data["video_preset"],
-                **{video_mode: compression},
-                # qp=form.cleaned_data["video_cqp"],
-                **{"c:a": "aac"},
-                audio_bitrate=form.cleaned_data["audio_bitrate"] * 1000,
-            ).global_args("-hwaccel", "cuda", "-y").run()
+            video_convert(
+                form.cleaned_data["input_file"],
+                request.FILES["input_file"],
+                form.cleaned_data["video_resolution"],
+                check_video_value(
+                    form.cleaned_data["video_mode"],
+                    form.cleaned_data["video_qp"],
+                    form.cleaned_data["video_bitrate"],
+                ),
+                form.cleaned_data["video_preset"],
+                check_audio_value(form.cleaned_data["audio_bitrate"]),
+            )
         return render(request, "test.html")
