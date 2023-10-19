@@ -45,6 +45,15 @@
                 <p>Video preset:</p>
                 {{ form.video_preset }}
             </div>
+            <p>Optional Effects</p>
+            <div class="container-interior">
+                <p>Mirror</p>
+                <span>{{ form.video_flip }}</span>
+                <p>Green outlines filter</p>
+                <span>{{ form.green_outlines }}</span>
+                <p>Gaussian blur</p>
+                <span>{{ form.gaussian_blur }}</span>
+            </div>
             <button>Convert Video</button>
         </div>
     </form>

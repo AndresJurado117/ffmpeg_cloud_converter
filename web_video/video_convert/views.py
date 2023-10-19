@@ -54,6 +54,9 @@ class ConvertVideo(forms.Form):
         initial=AUDIO_BITRATE_INITIAL,
         widget=forms.NumberInput(attrs={"type": "range"}),
     )
+    video_flip = forms.BooleanField(required=False)
+    green_outlines = forms.BooleanField(required=False)
+    gaussian_blur = forms.BooleanField(required=False)
 
 
 def video_render_queue():
@@ -118,15 +121,49 @@ def check_audio_value(audio_bitrate):
         raise ValueError
 
 
+def video_filters(mirror, green_outlines, gaussian_blur):
+    filters = []
+    if mirror == True:
+        filters.append(("hflip", {}))
+    if green_outlines == True:
+        filters.append(("sobel", {}))
+        filters.append(("eq", {"saturation": 0.2}))
+        filters.append(("tmix", {"frames": 15}))
+    if gaussian_blur == True:
+        filters.append(
+            ("gblur", {"sigma": 1}),
+        )
+    return filters
+
+
 # Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions
 def video_convert(
-    input_name, video_file, video_resolution, video_value, video_preset, audio_value
+    input_name,
+    video_file,
+    video_resolution,
+    video_value,
+    video_preset,
+    audio_value,
+    custom_filters,
 ):
     local_video_save(f"{input_name}", video_file)
     input = ffmpeg.input(f"uploaded_videos/{input_name}")
     video = input.video.filter(
-        "scale", width=-1, height=check_video_resolution_widescreen(video_resolution)
+        "scale",
+        width=-1,
+        height=check_video_resolution_widescreen(video_resolution),
     )
+
+    for filter_name, filter_params in custom_filters:
+        print(len(custom_filters))
+        print(filter_name, filter_params)
+        print(len(filter_params))
+        video = video.filter(filter_name, **filter_params)
+
+        # .filter("sobel")
+        # .filter("eq", saturation=0.2)
+        # .filter("tmix", frames=15)
+        # .filter("hflip")
     audio = input.audio
     ffmpeg.output(
         video,
@@ -145,7 +182,7 @@ async def index(request):
     return render(request, "index.html", {"form": ConvertVideo()})
 
 
-# Add check until video is encoded
+# Add check until video is encoded, for a queue.
 async def conversion(request):
     if request.method == "POST":
         form = ConvertVideo(request.POST, request.FILES)
@@ -161,5 +198,10 @@ async def conversion(request):
                 ),
                 form.cleaned_data["video_preset"],
                 check_audio_value(form.cleaned_data["audio_bitrate"]),
+                video_filters(
+                    form.cleaned_data["video_flip"],
+                    form.cleaned_data["green_outlines"],
+                    form.cleaned_data["gaussian_blur"],
+                ),
             )
         return render(request, "test.html")
