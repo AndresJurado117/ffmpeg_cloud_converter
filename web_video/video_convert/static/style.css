@@ -11,9 +11,13 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    margin: 0px;
     padding: 1.389rem;
-    background-color: hsl(217, 54%, 11%);
-  }
+    background-image: linear-gradient(to right bottom, #0f3841, #172d3a, #1b222f, #1b1922, #151015, #150d13, #150810, #15040c, #1d0815, #230c1d, #280e27, #2b1132);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 
 h1 {
     font-weight: 500;
@@ -28,16 +32,33 @@ p {
     font-weight: 400;
 }
 
-p, h1 {
+p, h1, h2, select {
     color: white;
     font-family: 'Outfit', sans-serif;
 }
 
+select {
+    color: white;
+    font-size: 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 8px;
+}
+
+select option {
+    background: transparent;
+    color: black;
+}
+
 .converter-container {
     width: 70rem;
-    background-color: hsl(216, 50%, 16%);
-    border: 2px solid white;
-    border-radius: 0.833rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
     box-shadow: 0rem 2.222rem 0rem 1.111rem rgba(0,0,0,0.05);
     padding: 1.333rem;
     margin-bottom: 1.111rem;
@@ -48,15 +69,47 @@ p, h1 {
     flex-direction: column;
 }
 
+.controller-row {
+    display: flex;
+    flex-direction: row;
+}
+
 .container-interior {
     display: flex;
     flex-direction: column;
-    border: 2px solid white;
-    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
     margin: 15px 0px;
     padding: 0px 15px;
 }
 
-#id_video_preset, #id_video_resolution {
-    margin-bottom: 15px;
+.equalizer {
+    display: flex;
+    text-align: center;
+}
+
+input[type="range"][orient="vertical"] {
+    appearance: slider-vertical;
+    width: 95px;
+    height: 175px;
+    padding: 0 5px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 16px 8px;
+    background: rgba(40,40,40,0.2);
+    color: black;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 5px;
+}
+
+input[type="checkbox"]:checked {
+    content: "";
+    background: rgba(40,40,40,0.7);
+    border: 2px solid gray;
 }

@@ -1,4 +1,8 @@
 {% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Cloud Video Encoder{% endblock %}
+{% block script %}<script src="{% static 'script.js' %}"></script>{% endblock %}
 
 {% block body %}
 
@@ -6,8 +10,8 @@
     <form action="{% url 'conversion' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="converter-container">
-            <h1>Video converter</h1>
-            <p>Input / Output </p>
+            <h1>Cloud Video converter</h1>
+            <h2>Input / Output </h2>
             <div class="container-interior">
                 <div class="input">
                     <p>Input File:</p>
@@ -18,7 +22,7 @@
                     {{ form.video_resolution }}
                 </div>
             </div>
-            <p>Rate control</p>
+            <h2>Rate control</h2>
             <div class="container-interior">
                 <div class="controller">
                     <p>Video rate control mode:</p>
@@ -32,29 +36,122 @@
                 <div class="controller">
                     <p>Target bitrate:</p>
                     {{ form.video_bitrate }}
-                    <p>Bitrate: <span id="bitrate_value"></span></p>
+                    <p>Bitrate: <span id="bitrate_value"></span><span> kbps</span></p>
                 </div>
                 <div class="controller">
                     <p>Audio bitrate (AAC):</p>
                     {{ form.audio_bitrate }}
-                    <p>Bitrate: <span id="audio_value"></span></p>
+                    <p>Bitrate: <span id="audio_value"></span><span> kbps</span></p>
                 </div>
             </div>
-            <p>Basic Encoder Options</p>
+            <h2>Basic Encoder Options</h2>
             <div class="container-interior">
                 <p>Video preset:</p>
                 {{ form.video_preset }}
             </div>
-            <p>Optional Effects</p>
+            <h2>Video Filters</h2>
             <div class="container-interior">
-                <p>Mirror</p>
-                <span>{{ form.video_flip }}</span>
-                <p>Green outlines filter</p>
-                <span>{{ form.green_outlines }}</span>
-                <p>Gaussian blur</p>
-                <span>{{ form.gaussian_blur }}</span>
+                <div class="controller-row">
+                    <p>Mirror</p>
+                    {{ form.video_flip }}
+                </div>
+                <div class="controller-row">
+                    <p>Green outlines filter</p>
+                    {{ form.green_outlines }}
+                </div>
+                <div class="controller-row">
+                    <p>Frame interpolation</p>
+                    {{ form.frame_interpolation }}
+                </div>
+                <div class="controller-row">
+                    <p>Gaussian blur</p>
+                    {{ form.gaussian_blur }}
+                </div>
+                <div class="controller">
+                    <div class="controller-row">
+                        <p>Brightness</p>
+                        {{ form.video_brightness_boolean }}
+                    </div>
+                    {{ form.video_brightness_value }}
+                    <p id="brightness_value"></p>
+                </div>
+                <div class="controller">
+                    <div class="controller-row">
+                        <p>Contrast</p>
+                        {{ form.video_contrast_boolean }}
+                    </div>
+                    {{ form.video_contrast_value }}
+                    <p id="contrast_value"></p>
+                </div>
+                <div class="controller">
+                    <div class="controller-row">
+                        <p>Saturation</p>
+                        {{ form.video_saturation_boolean }}
+                    </div>
+                    {{ form.video_saturation_value }}
+                    <p id="saturation_value"></p>
+                </div>
+                <div class="controller">
+                    <p>LUT (WIP)</p>
+                    {{ form.video_lut }}
+                </div>
             </div>
-            <button>Convert Video</button>
+            <h2>Audio Filters</h2>
+            <div class="container-interior">
+                <div class="controller">
+                    <p>Volume</p>
+                    {{ form.audio_volume }}
+                    <p><span id="volume_value"></span>%</p>
+                    
+                </div>
+                <div class="controller">
+                    <p>Equalizer - 10 Band</p>
+                    {{ form.equalizer_preset }}
+                    <div class="equalizer">
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_1 }}
+                            <p id="eq_bar_1"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_2 }}
+                            <p id="eq_bar_2"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_3 }}
+                            <p id="eq_bar_3"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_4 }}
+                            <p id="eq_bar_4"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_5 }}
+                            <p id="eq_bar_5"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_6 }}
+                            <p id="eq_bar_6"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_7 }}
+                            <p id="eq_bar_7"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_8 }}
+                            <p id="eq_bar_8"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_9 }}
+                            <p id="eq_bar_9"></p>
+                        </div>
+                        <div class="eq_bar">
+                            {{ form.eq_ten_band_10 }}
+                            <p id="eq_bar_10"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit">Convert Video</button>
         </div>
     </form>
 </div>
