@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         eqPresets.value = "custom";
     }
 
-    function equalizerValues(bandOne, bandTwo, bandThree, bandFour, bandFive, bandSix, bandSeven, bandEight, bandNine, bandTen) {
+    const equalizerValues = (bandOne, bandTwo, bandThree, bandFour, bandFive, bandSix, bandSeven, bandEight, bandNine, bandTen) => {
         eqBarOneSlider.value = eqBarOneValue.value = eqBarOneValue.innerHTML = bandOne;
         eqBarTwoSlider.value = eqBarTwoValue.value = eqBarTwoValue.innerHTML = bandTwo;
         eqBarThreeSlider.value = eqBarThreeValue.value = eqBarThreeValue.innerHTML = bandThree;
