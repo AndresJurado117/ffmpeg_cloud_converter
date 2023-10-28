@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     /*  Declare Video Mode and Sliders */
-    var videoMode = document.getElementById("id_video_mode");
-    var qpSlider = document.getElementById("id_video_qp");
-    var bitrateSlider = document.getElementById("id_video_bitrate");
+    const videoMode = document.getElementById("id_video_mode");
+    const qpSlider = document.getElementById("id_video_qp");
+    const bitrateSlider = document.getElementById("id_video_bitrate");
 
     videoMode.onchange = function () {
         if (this.value == "qp") {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* QP Slider */
 
-    var qpValue = document.getElementById("qp_value");
+    const qpValue = document.getElementById("qp_value");
 
     qpValue.innerHTML = qpSlider.value;
 
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* Video Bitrate Slider */
 
-    var bitrateValue = document.getElementById("bitrate_value");
+    const bitrateValue = document.getElementById("bitrate_value");
 
     bitrateValue.innerHTML = bitrateSlider.value;
 
@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* Audio Bitrate Slider */
 
-    var audioSlider = document.getElementById("id_audio_bitrate");
-    var audioValue = document.getElementById("audio_value");
+    const audioSlider = document.getElementById("id_audio_bitrate");
+    const audioValue = document.getElementById("audio_value");
 
     audioValue.innerHTML = audioSlider.value;
 
@@ -48,9 +48,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* Brightness Slider */
 
-    var brightnessBoolean = document.getElementById("id_video_brightness_boolean");
-    var brightnessSlider = document.getElementById("id_video_brightness_value");
-    var brightnessValue = document.getElementById("brightness_value");
+    const brightnessBoolean = document.getElementById("id_video_brightness_boolean");
+    const brightnessSlider = document.getElementById("id_video_brightness_value");
+    const brightnessValue = document.getElementById("brightness_value");
 
     brightnessBoolean.onclick = function () {
         if (brightnessSlider.disabled == true) {
@@ -69,9 +69,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* Contrast Slider */
 
-    var contrastBoolean = document.getElementById("id_video_contrast_boolean")
-    var contrastSlider = document.getElementById("id_video_contrast_value");
-    var contrastValue = document.getElementById("contrast_value");
+    const contrastBoolean = document.getElementById("id_video_contrast_boolean")
+    const contrastSlider = document.getElementById("id_video_contrast_value");
+    const contrastValue = document.getElementById("contrast_value");
 
     contrastBoolean.onclick = function () {
         if (contrastSlider.disabled == true) {
@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* Saturation Slider */
 
-    var saturationBoolean = document.getElementById("id_video_saturation_boolean")
-    var saturationSlider = document.getElementById("id_video_saturation_value");
-    var saturationValue = document.getElementById("saturation_value");
+    const saturationBoolean = document.getElementById("id_video_saturation_boolean")
+    const saturationSlider = document.getElementById("id_video_saturation_value");
+    const saturationValue = document.getElementById("saturation_value");
 
     saturationBoolean.onclick = function () {
         if (saturationSlider.disabled == true) {
@@ -111,8 +111,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* Volumen Slider */
 
-    var volumeSlider = document.getElementById("id_audio_volume");
-    var volumeValue = document.getElementById("volume_value");
+    const volumeSlider = document.getElementById("id_audio_volume");
+    const volumeValue = document.getElementById("volume_value");
 
     volumeValue.innerHTML = Math.round(volumeSlider.value * 100);
 
@@ -122,107 +122,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     /* EQ Presets and Sliders */
 
-    var eqPresets = document.getElementById("id_equalizer_preset");
+    const eqPresets = document.getElementById("id_equalizer_preset");
+    
+    const barSliderFunction = (sliderBar, sliderValue) => {
+        let slider = document.getElementById(sliderBar);
+        let value = document.getElementById(sliderValue);
 
-    var eqBarOneSlider = document.getElementById("id_eq_ten_band_1");
-    var eqBarOneValue = document.getElementById("eq_bar_1");
+        value.innerHTML = slider.value;
 
-    eqBarOneValue.innerHTML = eqBarOneSlider.value;
-
-    eqBarOneSlider.oninput = function () {
-        eqBarOneValue.innerHTML = this.value;
-        eqPresets.value = "custom"
+        slider.oninput = function () {
+            value.innerHTML = this.value;
+            eqPresets.value = "custom";
+            console.log(slider.value)
+        }
     }
 
-    var eqBarTwoSlider = document.getElementById("id_eq_ten_band_2");
-    var eqBarTwoValue = document.getElementById("eq_bar_2");
-
-    eqBarTwoValue.innerHTML = eqBarTwoSlider.value;
-
-    eqBarTwoSlider.oninput = function () {
-        eqBarTwoValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarThreeSlider = document.getElementById("id_eq_ten_band_3");
-    var eqBarThreeValue = document.getElementById("eq_bar_3");
-
-    eqBarThreeValue.innerHTML = eqBarThreeSlider.value;
-
-    eqBarThreeSlider.oninput = function () {
-        eqBarThreeValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarFourSlider = document.getElementById("id_eq_ten_band_4");
-    var eqBarFourValue = document.getElementById("eq_bar_4");
-
-    eqBarFourValue.innerHTML = eqBarFourSlider.value;
-
-    eqBarFourSlider.oninput = function () {
-        eqBarFourValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarFiveSlider = document.getElementById("id_eq_ten_band_5");
-    var eqBarFiveValue = document.getElementById("eq_bar_5");
-
-    eqBarFiveValue.innerHTML = eqBarFiveSlider.value;
-
-    eqBarFiveSlider.oninput = function () {
-        eqBarFiveValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarSixSlider = document.getElementById("id_eq_ten_band_6");
-    var eqBarSixValue = document.getElementById("eq_bar_6");
-
-    eqBarSixValue.innerHTML = eqBarSixSlider.value;
-
-    eqBarSixSlider.oninput = function () {
-        eqBarSixValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarSevenSlider = document.getElementById("id_eq_ten_band_7");
-    var eqBarSevenValue = document.getElementById("eq_bar_7");
-
-    eqBarSevenValue.innerHTML = eqBarSevenSlider.value;
-
-    eqBarSevenSlider.oninput = function () {
-        eqBarSevenValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarEightSlider = document.getElementById("id_eq_ten_band_8");
-    var eqBarEightValue = document.getElementById("eq_bar_8");
-
-    eqBarEightValue.innerHTML = eqBarEightSlider.value;
-
-    eqBarEightSlider.oninput = function () {
-        eqBarEightValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarNineSlider = document.getElementById("id_eq_ten_band_9");
-    var eqBarNineValue = document.getElementById("eq_bar_9");
-
-    eqBarNineValue.innerHTML = eqBarNineSlider.value;
-
-    eqBarNineSlider.oninput = function () {
-        eqBarNineValue.innerHTML = this.value;
-        eqPresets.value = "custom"
-    }
-
-    var eqBarTenSlider = document.getElementById("id_eq_ten_band_10");
-    var eqBarTenValue = document.getElementById("eq_bar_10");
-
-    eqBarTenValue.innerHTML = eqBarTenSlider.value;
-
-    eqBarTenSlider.oninput = function () {
-        eqBarTenValue.innerHTML = this.value;
-        eqPresets.value = "custom";
-    }
+    barSliderFunction("id_eq_ten_band_1", "eq_bar_1");
+    barSliderFunction("id_eq_ten_band_2", "eq_bar_2");
+    barSliderFunction("id_eq_ten_band_3", "eq_bar_3");
+    barSliderFunction("id_eq_ten_band_4", "eq_bar_4");
+    barSliderFunction("id_eq_ten_band_5", "eq_bar_5");
+    barSliderFunction("id_eq_ten_band_6", "eq_bar_6");
+    barSliderFunction("id_eq_ten_band_7", "eq_bar_7");
+    barSliderFunction("id_eq_ten_band_8", "eq_bar_8");
+    barSliderFunction("id_eq_ten_band_9", "eq_bar_9");
+    barSliderFunction("id_eq_ten_band_10", "eq_bar_10");
 
     const equalizerValues = (bandOne, bandTwo, bandThree, bandFour, bandFive, bandSix, bandSeven, bandEight, bandNine, bandTen) => {
         eqBarOneSlider.value = eqBarOneValue.value = eqBarOneValue.innerHTML = bandOne;
@@ -232,7 +156,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         eqBarFiveSlider.value = eqBarFiveValue.value = eqBarFiveValue.innerHTML = bandFive;
         eqBarSixSlider.value = eqBarSixValue.value = eqBarSixValue.innerHTML = bandSix;
         eqBarSevenSlider.value = eqBarSevenValue.value = eqBarSevenValue.innerHTML = bandSeven;
-        eqBarEightSlider.value = eqBarEightValue.value = eqBarEightValue.innerHTML = -bandEight;
+        eqBarEightSlider.value = eqBarEightValue.value = eqBarEightValue.innerHTML = bandEight;
         eqBarNineSlider.value = eqBarNineValue.value = eqBarNineValue.innerHTML = bandNine;
         eqBarTenSlider.value = eqBarTenValue.value = eqBarTenValue.innerHTML = bandTen;
     }
@@ -249,7 +173,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             case "eq_dialog_male":
                 equalizerValues(-20, -12, -1, 0.5, -5, 2, 4, 1.5, -2, 2)
             case "eq_telephone":
-                equalizerValues(-20, -20, -20, -20, 0, 10, 0, -20, -20, -20)
+                equalizerValues(-20, -20, -     20, -20, 0, 10, 0, -20, -20, -20)
             case "eq_music_top_end_boost":
                 equalizerValues(0, 0, 0, 0, 0, 0, 0, 2, 4, 4)
         }
