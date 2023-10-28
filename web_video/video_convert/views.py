@@ -18,8 +18,6 @@ AUDIO_BITRATE_MIN = 32
 AUDIO_BITRATE_MAX = 256
 AUDIO_BITRATE_INITIAL = 128
 
-# Video filter values
-
 # Audio filter values
 AUDIO_VOLUME_MIN = 0.0
 AUDIO_VOLUME_MAX = 4.0
@@ -146,88 +144,19 @@ class ConvertVideo(forms.Form):
     equalizer_preset = forms.ChoiceField(choices=equalizer_presets, initial="custom")
 
     # Equalizer
-    eq_ten_band_1 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_2 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_3 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_4 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_5 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_6 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_7 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_8 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_9 = forms.FloatField(
-        min_value=-20,
-        max_value=20,
-        initial=0,
-        widget=forms.NumberInput(
-            attrs={"type": "range", "orient": "vertical", "step": 0.1}
-        ),
-    )
-
-    eq_ten_band_10 = forms.FloatField(
+    eq_ten_band_1 = (
+        eq_ten_band_2
+    ) = (
+        eq_ten_band_3
+    ) = (
+        eq_ten_band_4
+    ) = (
+        eq_ten_band_5
+    ) = (
+        eq_ten_band_6
+    ) = (
+        eq_ten_band_7
+    ) = eq_ten_band_8 = eq_ten_band_9 = eq_ten_band_10 = forms.FloatField(
         min_value=-20,
         max_value=20,
         initial=0,
