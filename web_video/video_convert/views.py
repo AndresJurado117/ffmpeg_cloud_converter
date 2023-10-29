@@ -261,55 +261,29 @@ def video_filters(
     return filters
 
 
-def eq_ten_band(
-    band_1, band_2, band_3, band_4, band_5, band_6, band_7, band_8, band_9, band_10
-):
+def eq_ten_band(ten_band):
     equalizer = []
-    equalizer.append(("equalizer", {"f": 31.5, "t": "o", "w": "1", "g": band_1}))
-    equalizer.append(("equalizer", {"f": 63, "t": "o", "w": "1", "g": band_2}))
-    equalizer.append(("equalizer", {"f": 125, "t": "o", "w": "1", "g": band_3}))
-    equalizer.append(("equalizer", {"f": 250, "t": "o", "w": "1", "g": band_4}))
-    equalizer.append(("equalizer", {"f": 500, "t": "o", "w": "1", "g": band_5}))
-    equalizer.append(("equalizer", {"f": 1000, "t": "o", "w": "1", "g": band_6}))
-    equalizer.append(("equalizer", {"f": 2000, "t": "o", "w": "1", "g": band_7}))
-    equalizer.append(("equalizer", {"f": 4000, "t": "o", "w": "1", "g": band_8}))
-    equalizer.append(("equalizer", {"f": 8000, "t": "o", "w": "1", "g": band_9}))
-    equalizer.append(("equalizer", {"f": 16000, "t": "o", "w": "1", "g": band_10}))
+    equalizer.append(("equalizer", {"f": 31.5, "t": "o", "w": "1", "g": ten_band[0]}))
+    equalizer.append(("equalizer", {"f": 63, "t": "o", "w": "1", "g": ten_band[1]}))
+    equalizer.append(("equalizer", {"f": 125, "t": "o", "w": "1", "g": ten_band[2]}))
+    equalizer.append(("equalizer", {"f": 250, "t": "o", "w": "1", "g": ten_band[3]}))
+    equalizer.append(("equalizer", {"f": 500, "t": "o", "w": "1", "g": ten_band[4]}))
+    equalizer.append(("equalizer", {"f": 1000, "t": "o", "w": "1", "g": ten_band[5]}))
+    equalizer.append(("equalizer", {"f": 2000, "t": "o", "w": "1", "g": ten_band[6]}))
+    equalizer.append(("equalizer", {"f": 4000, "t": "o", "w": "1", "g": ten_band[7]}))
+    equalizer.append(("equalizer", {"f": 8000, "t": "o", "w": "1", "g": ten_band[8]}))
+    equalizer.append(("equalizer", {"f": 16000, "t": "o", "w": "1", "g": ten_band[9]}))
     return equalizer
 
 
-def audio_filters(
-    audio_volume,
-    band_1,
-    band_2,
-    band_3,
-    band_4,
-    band_5,
-    band_6,
-    band_7,
-    band_8,
-    band_9,
-    band_10,
-):
+def audio_filters(audio_volume, ten_band):
     audio_filters = []
     if AUDIO_VOLUME_MIN <= audio_volume <= AUDIO_VOLUME_MAX:
         audio_filters.append(("volume", {"volume": audio_volume}))
     else:
         raise ValueError
-    audio_filters.extend(
-        eq_ten_band(
-            band_1,
-            band_2,
-            band_3,
-            band_4,
-            band_5,
-            band_6,
-            band_7,
-            band_8,
-            band_9,
-            band_10,
-        )
-    )
+    print(ten_band)
+    audio_filters.extend(eq_ten_band(ten_band))
     return audio_filters
 
 
@@ -388,16 +362,18 @@ async def conversion(request):
                     ),
                     audio_filters(
                         form.cleaned_data["audio_volume"],
-                        form.cleaned_data["eq_ten_band_1"],
-                        form.cleaned_data["eq_ten_band_2"],
-                        form.cleaned_data["eq_ten_band_3"],
-                        form.cleaned_data["eq_ten_band_4"],
-                        form.cleaned_data["eq_ten_band_5"],
-                        form.cleaned_data["eq_ten_band_6"],
-                        form.cleaned_data["eq_ten_band_7"],
-                        form.cleaned_data["eq_ten_band_8"],
-                        form.cleaned_data["eq_ten_band_9"],
-                        form.cleaned_data["eq_ten_band_10"],
+                        (
+                            form.cleaned_data["eq_ten_band_1"],
+                            form.cleaned_data["eq_ten_band_2"],
+                            form.cleaned_data["eq_ten_band_3"],
+                            form.cleaned_data["eq_ten_band_4"],
+                            form.cleaned_data["eq_ten_band_5"],
+                            form.cleaned_data["eq_ten_band_6"],
+                            form.cleaned_data["eq_ten_band_7"],
+                            form.cleaned_data["eq_ten_band_8"],
+                            form.cleaned_data["eq_ten_band_9"],
+                            form.cleaned_data["eq_ten_band_10"],
+                        ),
                     ),
                 )
             except (NotImplementedError, ValueError):

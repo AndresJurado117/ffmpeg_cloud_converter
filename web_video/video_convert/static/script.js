@@ -126,14 +126,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     const barSliderFunction = (sliderBar, sliderValue) => {
         let slider = document.getElementById(sliderBar);
-        let value = document.getElementById(sliderValue);
+        let sliderVal = document.getElementById(sliderValue);
 
-        value.innerHTML = slider.value;
+        sliderVal.innerHTML = slider.value;
 
         slider.oninput = function () {
-            value.innerHTML = this.value;
+            sliderVal.innerHTML = this.value;
             eqPresets.value = "custom";
-            console.log(slider.value)
         }
     }
 
@@ -149,16 +148,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     barSliderFunction("id_eq_ten_band_10", "eq_bar_10");
 
     const equalizerValues = (bandOne, bandTwo, bandThree, bandFour, bandFive, bandSix, bandSeven, bandEight, bandNine, bandTen) => {
-        eqBarOneSlider.value = eqBarOneValue.value = eqBarOneValue.innerHTML = bandOne;
-        eqBarTwoSlider.value = eqBarTwoValue.value = eqBarTwoValue.innerHTML = bandTwo;
-        eqBarThreeSlider.value = eqBarThreeValue.value = eqBarThreeValue.innerHTML = bandThree;
-        eqBarFourSlider.value = eqBarFourValue.value = eqBarFourValue.innerHTML = bandFour;
-        eqBarFiveSlider.value = eqBarFiveValue.value = eqBarFiveValue.innerHTML = bandFive;
-        eqBarSixSlider.value = eqBarSixValue.value = eqBarSixValue.innerHTML = bandSix;
-        eqBarSevenSlider.value = eqBarSevenValue.value = eqBarSevenValue.innerHTML = bandSeven;
-        eqBarEightSlider.value = eqBarEightValue.value = eqBarEightValue.innerHTML = bandEight;
-        eqBarNineSlider.value = eqBarNineValue.value = eqBarNineValue.innerHTML = bandNine;
-        eqBarTenSlider.value = eqBarTenValue.value = eqBarTenValue.innerHTML = bandTen;
+        document.getElementById("id_eq_ten_band_1").value = document.getElementById("eq_bar_1").value = document.getElementById("eq_bar_1").innerHTML = bandOne;
+        document.getElementById("id_eq_ten_band_2").value = document.getElementById("eq_bar_2").value = document.getElementById("eq_bar_2").innerHTML = bandTwo;
+        document.getElementById("id_eq_ten_band_3").value = document.getElementById("eq_bar_3").value = document.getElementById("eq_bar_3").innerHTML = bandThree;
+        document.getElementById("id_eq_ten_band_4").value = document.getElementById("eq_bar_4").value = document.getElementById("eq_bar_4").innerHTML = bandFour;
+        document.getElementById("id_eq_ten_band_5").value = document.getElementById("eq_bar_5").value = document.getElementById("eq_bar_5").innerHTML = bandFive;
+        document.getElementById("id_eq_ten_band_6").value = document.getElementById("eq_bar_6").value = document.getElementById("eq_bar_6").innerHTML = bandSix;
+        document.getElementById("id_eq_ten_band_7").value = document.getElementById("eq_bar_7").value = document.getElementById("eq_bar_7").innerHTML = bandSeven;
+        document.getElementById("id_eq_ten_band_8").value = document.getElementById("eq_bar_8").value = document.getElementById("eq_bar_8").innerHTML = bandEight;
+        document.getElementById("id_eq_ten_band_9").value = document.getElementById("eq_bar_9").value = document.getElementById("eq_bar_9").innerHTML = bandNine;
+        document.getElementById("id_eq_ten_band_10").value = document.getElementById("eq_bar_10").value = document.getElementById("eq_bar_10").innerHTML = bandTen;
     }
 
     eqPresets.onchange = function () {
@@ -173,7 +172,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             case "eq_dialog_male":
                 equalizerValues(-20, -12, -1, 0.5, -5, 2, 4, 1.5, -2, 2)
             case "eq_telephone":
-                equalizerValues(-20, -20, -     20, -20, 0, 10, 0, -20, -20, -20)
+                equalizerValues(-20, -20, -20, -20, 0, 10, 0, -20, -20, -20)
             case "eq_music_top_end_boost":
                 equalizerValues(0, 0, 0, 0, 0, 0, 0, 2, 4, 4)
         }
