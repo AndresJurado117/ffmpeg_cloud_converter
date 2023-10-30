@@ -5,14 +5,12 @@ from django.urls import reverse
 import ffmpeg, requests, os
 from dotenv import load_dotenv
 from .video_parameters import (
-    local_video_save,
-    check_video_resolution_widescreen,
     check_video_value,
     video_convert,
 )
 from .video_filters import video_filters
 from .audio_parameters import check_audio_value
-from .audio_filters import eq_ten_band, audio_filters
+from .audio_filters import audio_filters
 
 load_dotenv()
 print(os.getenv("GOOGLE_CLOUD_STORAGE_API"))
