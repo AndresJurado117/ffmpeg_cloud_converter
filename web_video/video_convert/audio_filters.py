@@ -5,7 +5,6 @@ def eq_ten_band(ten_band: tuple) -> list:
         equalizer.append(
             ("equalizer", {"f": waves[i], "t": "o", "w": "1", "g": ten_band[i]})
         )
-
     return equalizer
 
 

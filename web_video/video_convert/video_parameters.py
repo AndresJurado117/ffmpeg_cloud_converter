@@ -84,6 +84,7 @@ def video_convert(
         audio,
         f"converted_videos/{input_name}_converted.mp4",
         vcodec="h264_nvenc",
+        pix_fmt="yuv420p",
         preset=video_preset,
         rc=video_value[0],
         **{video_value[1]: video_value[2]},

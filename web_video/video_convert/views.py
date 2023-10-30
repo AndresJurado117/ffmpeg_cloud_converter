@@ -121,13 +121,13 @@ class ConvertVideo(forms.Form):
 
     lut_list = (
         ("none", "None"),
-        ("Rec709_Fujifilm_3510_D65.cube", "Fujifilm 3510 (Juan Melara)"),
-        ("Rec709_Kodak_2383_D65.cube", "Kodak 2383 (Juan Melara)"),
-        ("Rec709_Kodak_2393_D65.cube", "Kodak 2393 (Juan Melara)"),
-        ("LBK-K-Tone_33.cube", "The new K-Tone (Frank Glencairn)"),
-        ("LBK-K-Tone-Intense_33.cube", "New K-Tone intense (Frank Glencairn)"),
+        ("R709F3510D65", "Fujifilm 3510 (Juan Melara)"),
+        ("R709K2383D65", "Kodak 2383 (Juan Melara)"),
+        ("R709K2393D65", "Kodak 2393 (Juan Melara)"),
+        ("LBKKT33", "The new K-Tone (Frank Glencairn)"),
+        ("LBKKTI33", "New K-Tone intense (Frank Glencairn)"),
         (
-            "LBK-K-Tone-Intense_BlackLift_33.cube",
+            "LBKKTIB33",
             "New K-Tone intense - raised blacks (Frank Glencairn)",
         ),
     )
@@ -229,6 +229,7 @@ async def conversion(request):
                         form.cleaned_data["video_contrast_value"],
                         form.cleaned_data["video_saturation_boolean"],
                         form.cleaned_data["video_saturation_value"],
+                        form.cleaned_data["video_lut"],
                     ),
                     audio_filters(
                         form.cleaned_data["audio_volume"],
