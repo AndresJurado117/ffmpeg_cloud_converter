@@ -2,7 +2,20 @@ from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-import ffmpeg, requests
+import ffmpeg, requests, os
+from dotenv import load_dotenv
+from .video_parameters import (
+    local_video_save,
+    check_video_resolution_widescreen,
+    check_video_value,
+    video_convert,
+)
+from .video_filters import video_filters
+from .audio_parameters import check_audio_value
+from .audio_filters import eq_ten_band, audio_filters
+
+load_dotenv()
+print(os.getenv("GOOGLE_CLOUD_STORAGE_API"))
 
 # Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions, apparently RTX A2000, A4000 can take around 26 sessions
 SIMULTANEOUS_TRANSCODING_SESSIONS = 5
@@ -130,7 +143,7 @@ class ConvertVideo(forms.Form):
         widget=forms.NumberInput(attrs={"type": "range", "step": 0.01}),
     )
 
-    # Equalizer presets
+    # Equalizer presets form
     equalizer_presets = (
         ("custom", "Custom"),
         ("eq_hi_end", "Dialog - Clean add hi end"),
@@ -143,7 +156,7 @@ class ConvertVideo(forms.Form):
 
     equalizer_preset = forms.ChoiceField(choices=equalizer_presets, initial="custom")
 
-    # Equalizer
+    # Equalizer form
     eq_ten_band_1 = (
         eq_ten_band_2
     ) = (
@@ -170,161 +183,12 @@ def video_render_queue():
     ...
 
 
-def azure_upload():
+def google_cloud_storage_upload():
     ...
 
 
 def azure_get_link():
     ...
-
-
-def local_video_save(filename, content):
-    with open(f"uploaded_videos/{filename}", "wb") as file:
-        for chunk in content.chunks():
-            file.write(chunk)
-
-
-def check_video_resolution_widescreen(video_resolution):
-    match video_resolution:
-        case "-1":
-            return video_resolution
-        case "360":
-            return video_resolution
-        case "480":
-            return video_resolution
-        case "720":
-            return video_resolution
-        case "1080":
-            return video_resolution
-        case "2160":
-            return video_resolution
-        case _:
-            raise NotImplementedError
-
-
-def check_video_value(mode, video_qp, video_bitrate):
-    match mode:
-        case "qp":
-            mode_name = "constqp"
-            mode_value = "qp"
-        case "vbr":
-            mode_name = "vbr"
-            mode_value = "b"
-        case _:
-            raise NotImplementedError
-
-    if mode_name == "constqp" and VIDEO_QP_MIN <= video_qp <= VIDEO_QP_MAX:
-        return [mode_name, mode_value, video_qp]
-    elif mode_name == "vbr" and VIDEO_BITRATE_MIN <= video_bitrate <= VIDEO_BITRATE_MAX:
-        return [mode_name, mode_value, video_bitrate * 1000]
-    else:
-        raise ValueError
-
-
-def check_audio_value(audio_bitrate):
-    if AUDIO_BITRATE_MIN <= audio_bitrate <= AUDIO_BITRATE_MAX:
-        return audio_bitrate * 1000
-    else:
-        raise ValueError
-
-
-def video_filters(
-    mirror,
-    green_outlines,
-    frame_interpolation,
-    gaussian_blur,
-    video_brightness_boolean,
-    video_brightness_value,
-    video_contrast_boolean,
-    video_contrast_value,
-    video_saturation_boolean,
-    video_saturation_value,
-):
-    filters = []
-    if mirror == True:
-        filters.append(("hflip", {}))
-    if green_outlines == True:
-        filters.append(("sobel", {}))
-        filters.append(("eq", {"saturation": 0.2}))
-    if frame_interpolation == True:
-        filters.append(("tmix", {"frames": 15}))
-    if gaussian_blur == True:
-        filters.append(
-            ("gblur", {"sigma": 1}),
-        )
-    if video_brightness_boolean == True and -1.0 <= video_brightness_value <= 1.0:
-        filters.append(("eq", {"brightness": video_brightness_value}))
-    if video_contrast_boolean == True and -1.0 <= video_contrast_value <= 2.0:
-        filters.append(("eq", {"contrast": video_contrast_value}))
-    if video_saturation_boolean == True and 0.0 <= video_saturation_value <= 3.0:
-        filters.append(("eq", {"saturation": video_saturation_value}))
-    return filters
-
-
-def eq_ten_band(ten_band):
-    equalizer = []
-    equalizer.append(("equalizer", {"f": 31.5, "t": "o", "w": "1", "g": ten_band[0]}))
-    equalizer.append(("equalizer", {"f": 63, "t": "o", "w": "1", "g": ten_band[1]}))
-    equalizer.append(("equalizer", {"f": 125, "t": "o", "w": "1", "g": ten_band[2]}))
-    equalizer.append(("equalizer", {"f": 250, "t": "o", "w": "1", "g": ten_band[3]}))
-    equalizer.append(("equalizer", {"f": 500, "t": "o", "w": "1", "g": ten_band[4]}))
-    equalizer.append(("equalizer", {"f": 1000, "t": "o", "w": "1", "g": ten_band[5]}))
-    equalizer.append(("equalizer", {"f": 2000, "t": "o", "w": "1", "g": ten_band[6]}))
-    equalizer.append(("equalizer", {"f": 4000, "t": "o", "w": "1", "g": ten_band[7]}))
-    equalizer.append(("equalizer", {"f": 8000, "t": "o", "w": "1", "g": ten_band[8]}))
-    equalizer.append(("equalizer", {"f": 16000, "t": "o", "w": "1", "g": ten_band[9]}))
-    return equalizer
-
-
-def audio_filters(audio_volume, ten_band):
-    audio_filters = []
-    if AUDIO_VOLUME_MIN <= audio_volume <= AUDIO_VOLUME_MAX:
-        audio_filters.append(("volume", {"volume": audio_volume}))
-    else:
-        raise ValueError
-    print(ten_band)
-    audio_filters.extend(eq_ten_band(ten_band))
-    return audio_filters
-
-
-# Need to check if an audio track exists
-def video_convert(
-    input_name,
-    video_file,
-    video_resolution,
-    video_value,
-    video_preset,
-    audio_value,
-    video_filters,
-    audio_filters,
-):
-    local_video_save(f"{input_name}", video_file)
-    input = ffmpeg.input(f"uploaded_videos/{input_name}")
-    video = input.video.filter(
-        "scale",
-        width=-1,
-        height=check_video_resolution_widescreen(video_resolution),
-    )
-
-    for filter_name, filter_params in video_filters:
-        video = video.filter(filter_name, **filter_params)
-
-    audio = input.audio
-
-    for filter_name, filter_params in audio_filters:
-        audio = audio.filter(filter_name, **filter_params)
-
-    ffmpeg.output(
-        video,
-        audio,
-        f"converted_videos/{input_name}_converted.mp4",
-        vcodec="h264_nvenc",
-        preset=video_preset,
-        rc=video_value[0],
-        **{video_value[1]: video_value[2]},
-        acodec="aac",
-        audio_bitrate=audio_value,
-    ).global_args("-hwaccel", "cuda", "-y").run()
 
 
 async def index(request):
@@ -345,9 +209,17 @@ async def conversion(request):
                         form.cleaned_data["video_mode"],
                         form.cleaned_data["video_qp"],
                         form.cleaned_data["video_bitrate"],
+                        VIDEO_QP_MIN,
+                        VIDEO_QP_MAX,
+                        VIDEO_BITRATE_MIN,
+                        VIDEO_BITRATE_MAX,
                     ),
                     form.cleaned_data["video_preset"],
-                    check_audio_value(form.cleaned_data["audio_bitrate"]),
+                    check_audio_value(
+                        form.cleaned_data["audio_bitrate"],
+                        AUDIO_BITRATE_MIN,
+                        AUDIO_BITRATE_MAX,
+                    ),
                     video_filters(
                         form.cleaned_data["video_flip"],
                         form.cleaned_data["green_outlines"],
@@ -362,6 +234,8 @@ async def conversion(request):
                     ),
                     audio_filters(
                         form.cleaned_data["audio_volume"],
+                        AUDIO_VOLUME_MIN,
+                        AUDIO_VOLUME_MAX,
                         (
                             form.cleaned_data["eq_ten_band_1"],
                             form.cleaned_data["eq_ten_band_2"],

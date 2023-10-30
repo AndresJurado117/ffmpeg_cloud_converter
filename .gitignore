@@ -4,3 +4,5 @@ web_video/converted_videos/
 web_video/uploaded_videos/
 web_video/video_convert/__pycache__/
 web_video/web_video/__pycache__/
+
+web_video/.env
