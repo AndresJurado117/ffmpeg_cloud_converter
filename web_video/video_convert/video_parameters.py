@@ -1,4 +1,5 @@
 import ffmpeg
+from .google_cloud_storage import upload_cs_file
 
 
 def local_video_save(filename: str, content) -> None:
@@ -91,3 +92,8 @@ def video_convert(
         acodec="aac",
         audio_bitrate=audio_value,
     ).global_args("-hwaccel", "cuda", "-y").run()
+    upload_cs_file(
+        "video_cloud_converter",
+        f"converted_videos/{input_name}_converted.mp4",
+        f"converted_videos/{input_name}_converted",
+    )

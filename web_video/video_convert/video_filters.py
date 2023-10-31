@@ -1,4 +1,7 @@
-def video_luts_list(lut_name) -> str:
+def video_luts_list(lut_name: str) -> str:
+    """
+    Select LUT file from the backend using the frontend LUT string code.
+    """
     match lut_name:
         case "R709F3510D65":
             lut = "Rec709_Fujifilm_3510_D65.cube"
