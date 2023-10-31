@@ -1,11 +1,18 @@
-import ffmpeg
-from .google_cloud_storage import upload_cs_file
+import ffmpeg, os
+from .google_cloud_storage import upload_cs_file, get_cs_file_url
 
 
 def local_video_save(filename: str, content) -> None:
     with open(f"uploaded_videos/{filename}", "wb") as file:
         for chunk in content.chunks():
             file.write(chunk)
+
+
+def local_video_delete(filename: str) -> None:
+    if os.path.exists(filename):
+        os.remove(filename)
+    else:
+        print("The file does not exist")
 
 
 def check_video_resolution_widescreen(video_resolution: str) -> str:
@@ -96,4 +103,11 @@ def video_convert(
         "video_cloud_converter",
         f"converted_videos/{input_name}_converted.mp4",
         f"converted_videos/{input_name}_converted",
+    )
+    # Delete a file
+    local_video_delete(f"uploaded_videos/{input_name}")
+    print(
+        get_cs_file_url(
+            "video_cloud_converter", f"converted_videos/{input_name}_converted"
+        )
     )
