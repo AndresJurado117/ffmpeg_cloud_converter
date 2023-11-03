@@ -1,9 +1,7 @@
 from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.urls import reverse
-import ffmpeg, requests, os
-from dotenv import load_dotenv
+import requests
 from .video_parameters import (
     check_video_value,
     video_convert,
@@ -11,9 +9,7 @@ from .video_parameters import (
 from .video_filters import video_filters
 from .audio_parameters import check_audio_value
 from .audio_filters import audio_filters
-
-load_dotenv()
-print(os.getenv("GOOGLE_CLOUD_STORAGE_API"))
+from .google_cloud_storage import get_cs_file_url
 
 # Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions, apparently RTX A2000, A4000 can take around 26 sessions
 SIMULTANEOUS_TRANSCODING_SESSIONS = 5
@@ -251,4 +247,13 @@ async def conversion(request):
                 )
             except (NotImplementedError, ValueError):
                 return render(request, "error.html")
-        return render(request, "test.html")
+        return render(
+            request,
+            "test.html",
+            {
+                "download_link": get_cs_file_url(
+                    "video_cloud_converter",
+                    f"converted_videos/{form.cleaned_data['input_file']}_converted",
+                )
+            },
+        )

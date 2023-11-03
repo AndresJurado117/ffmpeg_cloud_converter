@@ -60,7 +60,6 @@ def check_video_value(
         raise ValueError
 
 
-# Need to check if an audio track exists
 def video_convert(
     input_name: str,
     video_file,
@@ -73,6 +72,12 @@ def video_convert(
 ) -> None:
     local_video_save(f"{input_name}", video_file)
     input = ffmpeg.input(f"uploaded_videos/{input_name}")
+    video_info = ffmpeg.probe(f"uploaded_videos/{input_name}")
+    number_streams = len(video_info["streams"])
+    streams = []
+
+    for i in range(number_streams):
+        streams.append(video_info["streams"][i]["codec_type"])
     video = input.video.filter(
         "scale",
         width=-1,
@@ -82,32 +87,46 @@ def video_convert(
     for filter_name, filter_params in video_filters:
         video = video.filter(filter_name, **filter_params)
 
-    audio = input.audio
+    if "audio" in streams:
+        audio = input.audio
 
-    for filter_name, filter_params in audio_filters:
-        audio = audio.filter(filter_name, **filter_params)
+        for filter_name, filter_params in audio_filters:
+            audio = audio.filter(filter_name, **filter_params)
 
-    ffmpeg.output(
-        video,
-        audio,
-        f"converted_videos/{input_name}_converted.mp4",
-        vcodec="h264_nvenc",
-        pix_fmt="yuv420p",
-        preset=video_preset,
-        rc=video_value[0],
-        **{video_value[1]: video_value[2]},
-        acodec="aac",
-        audio_bitrate=audio_value,
-    ).global_args("-hwaccel", "cuda", "-y").run()
-    upload_cs_file(
-        "video_cloud_converter",
-        f"converted_videos/{input_name}_converted.mp4",
-        f"converted_videos/{input_name}_converted",
-    )
+        ffmpeg.output(
+            video,
+            audio,
+            f"converted_videos/{input_name}_converted.mp4",
+            vcodec="h264_nvenc",
+            pix_fmt="yuv420p",
+            preset=video_preset,
+            rc=video_value[0],
+            **{video_value[1]: video_value[2]},
+            acodec="aac",
+            audio_bitrate=audio_value,
+        ).global_args("-hwaccel", "cuda", "-y").run()
+        upload_cs_file(
+            "video_cloud_converter",
+            f"converted_videos/{input_name}_converted.mp4",
+            f"converted_videos/{input_name}_converted",
+        )
+    else:
+        ffmpeg.output(
+            video,
+            f"converted_videos/{input_name}_converted.mp4",
+            vcodec="h264_nvenc",
+            pix_fmt="yuv420p",
+            preset=video_preset,
+            rc=video_value[0],
+            **{video_value[1]: video_value[2]},
+        ).global_args("-hwaccel", "cuda", "-y").run()
+        upload_cs_file(
+            "video_cloud_converter",
+            f"converted_videos/{input_name}_converted.mp4",
+            f"converted_videos/{input_name}_converted",
+        )
     # Delete a file
     local_video_delete(f"uploaded_videos/{input_name}")
-    print(
-        get_cs_file_url(
-            "video_cloud_converter", f"converted_videos/{input_name}_converted"
-        )
+    return get_cs_file_url(
+        "video_cloud_converter", f"converted_videos/{input_name}_converted"
     )
