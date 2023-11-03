@@ -1,6 +1,52 @@
 import ffmpeg, os
 from .google_cloud_storage import upload_cs_file, get_cs_file_url
 
+video_extensions = (
+    ".3g2",
+    ".3gp",
+    ".amv",
+    ".asf",
+    ".avi",
+    ".drc",
+    ".flv",
+    ".f4v",
+    ".f4p",
+    ".f4a",
+    ".f4b",
+    ".gif",
+    ".gifv",
+    ".m4v",
+    ".mkv",
+    ".mng",
+    ".mov",
+    ".qt",
+    ".mp4",
+    ".m4p",
+    ".m4v",
+    ".mpg",
+    ".mp2",
+    ".mpeg",
+    ".mpe",
+    ".mpv",
+    ".m2v",
+    ".MTS",
+    ".M2TS",
+    ".TS",
+    ".mxf",
+    ".nsv",
+    ".ogv",
+    ".ogg",
+    ".rm",
+    ".rmvb",
+    ".roq",
+    ".svi",
+    ".viv",
+    ".vob",
+    ".webm",
+    ".wmv",
+    ".yuv",
+)
+
 
 def local_video_save(filename: str, content) -> None:
     with open(f"uploaded_videos/{filename}", "wb") as file:
@@ -70,51 +116,6 @@ def video_convert(
     video_filters,
     audio_filters,
 ) -> None:
-    video_extensions = (
-        ".3g2",
-        ".3gp",
-        ".amv",
-        ".asf",
-        ".avi",
-        ".drc",
-        ".flv",
-        ".f4v",
-        ".f4p",
-        ".f4a",
-        ".f4b",
-        ".gif",
-        ".gifv",
-        ".m4v",
-        ".mkv",
-        ".mng",
-        ".mov",
-        ".qt",
-        ".mp4",
-        ".m4p",
-        ".m4v",
-        ".mpg",
-        ".mp2",
-        ".mpeg",
-        ".mpe",
-        ".mpv",
-        ".m2v",
-        ".MTS",
-        ".M2TS",
-        ".TS",
-        ".mxf",
-        ".nsv",
-        ".ogv",
-        ".ogg",
-        ".rm",
-        ".rmvb",
-        ".roq",
-        ".svi",
-        ".viv",
-        ".vob",
-        ".webm",
-        ".wmv",
-        ".yuv",
-    )
     if input_name.endswith(video_extensions):
         local_video_save(f"{input_name}", video_file)
         input = ffmpeg.input(f"uploaded_videos/{input_name}")
@@ -127,11 +128,26 @@ def video_convert(
 
     for i in range(number_streams):
         streams.append(video_info["streams"][i]["codec_type"])
-    video = input.video.filter(
-        "scale",
-        width=-1,
-        height=check_video_resolution_widescreen(video_resolution),
-    )
+
+    if video_info["streams"][0]["codec_type"] == "video":
+        if int(video_info["streams"][0]["width"]) > int(
+            video_info["streams"][0]["height"]
+        ):
+            video = input.video.filter(
+                "scale",
+                width=-1,
+                height=check_video_resolution_widescreen(video_resolution),
+            )
+        elif int(video_info["streams"][0]["width"]) < int(
+            video_info["streams"][0]["height"]
+        ):
+            video = input.video.filter(
+                "scale",
+                width=check_video_resolution_widescreen(video_resolution),
+                height=-1,
+            )
+        else:
+            raise ValueError
 
     for filter_name, filter_params in video_filters:
         video = video.filter(filter_name, **filter_params)

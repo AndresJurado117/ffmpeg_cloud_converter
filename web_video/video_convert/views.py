@@ -245,7 +245,7 @@ async def conversion(request):
                         ),
                     ),
                 )
-            except (NotImplementedError, ValueError):
+            except (NotImplementedError, ValueError, TypeError):
                 return render(request, "error.html")
         return render(
             request,
