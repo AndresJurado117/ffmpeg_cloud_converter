@@ -196,7 +196,7 @@ async def conversion(request):
         if form.is_valid():
             try:
                 video_convert(
-                    form.cleaned_data["input_file"],
+                    form.cleaned_data["input_file"].name,
                     request.FILES["input_file"],
                     form.cleaned_data["video_resolution"],
                     check_video_value(

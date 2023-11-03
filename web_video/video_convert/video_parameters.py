@@ -70,8 +70,57 @@ def video_convert(
     video_filters,
     audio_filters,
 ) -> None:
-    local_video_save(f"{input_name}", video_file)
-    input = ffmpeg.input(f"uploaded_videos/{input_name}")
+    video_extensions = (
+        ".3g2",
+        ".3gp",
+        ".amv",
+        ".asf",
+        ".avi",
+        ".drc",
+        ".flv",
+        ".f4v",
+        ".f4p",
+        ".f4a",
+        ".f4b",
+        ".gif",
+        ".gifv",
+        ".m4v",
+        ".mkv",
+        ".mng",
+        ".mov",
+        ".qt",
+        ".mp4",
+        ".m4p",
+        ".m4v",
+        ".mpg",
+        ".mp2",
+        ".mpeg",
+        ".mpe",
+        ".mpv",
+        ".m2v",
+        ".MTS",
+        ".M2TS",
+        ".TS",
+        ".mxf",
+        ".nsv",
+        ".ogv",
+        ".ogg",
+        ".rm",
+        ".rmvb",
+        ".roq",
+        ".svi",
+        ".viv",
+        ".vob",
+        ".webm",
+        ".wmv",
+        ".yuv",
+    )
+    if input_name.endswith(video_extensions):
+        local_video_save(f"{input_name}", video_file)
+        input = ffmpeg.input(f"uploaded_videos/{input_name}")
+    else:
+        raise TypeError
+
     video_info = ffmpeg.probe(f"uploaded_videos/{input_name}")
     number_streams = len(video_info["streams"])
     streams = []
