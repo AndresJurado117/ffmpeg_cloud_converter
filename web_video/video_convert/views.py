@@ -2,14 +2,9 @@ from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 import requests
-from .video_parameters import (
-    check_video_value,
-    video_convert,
-)
-from .video_filters import video_filters
-from .audio_parameters import check_audio_value
-from .audio_filters import audio_filters
+from .video_parameters import video_convert
 from .google_cloud_storage import get_cs_file_url
+from .ffmpeg_exceptions import InvalidVideoFileType
 
 # Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions, apparently RTX A2000, A4000 can take around 26 sessions
 SIMULTANEOUS_TRANSCODING_SESSIONS = 5
@@ -47,7 +42,7 @@ class ConvertVideo(forms.Form):
     )
     nvidia_rate_control = ("qp", "QP"), ("vbr", "VBR")
 
-    input_file = forms.FileField()
+    input_file = forms.FileField(widget=forms.FileInput(attrs={"accept": "video/*"}))
 
     video_resolution = forms.ChoiceField(choices=widescreen_resolutions)
 
@@ -177,14 +172,6 @@ def video_render_queue():
     ...
 
 
-def google_cloud_storage_upload():
-    ...
-
-
-def azure_get_link():
-    ...
-
-
 async def index(request):
     return render(request, "index.html", {"form": ConvertVideo()})
 
@@ -199,7 +186,7 @@ async def conversion(request):
                     form.cleaned_data["input_file"].name,
                     request.FILES["input_file"],
                     form.cleaned_data["video_resolution"],
-                    check_video_value(
+                    [
                         form.cleaned_data["video_mode"],
                         form.cleaned_data["video_qp"],
                         form.cleaned_data["video_bitrate"],
@@ -207,14 +194,14 @@ async def conversion(request):
                         VIDEO_QP_MAX,
                         VIDEO_BITRATE_MIN,
                         VIDEO_BITRATE_MAX,
-                    ),
+                    ],
                     form.cleaned_data["video_preset"],
-                    check_audio_value(
+                    [
                         form.cleaned_data["audio_bitrate"],
                         AUDIO_BITRATE_MIN,
                         AUDIO_BITRATE_MAX,
-                    ),
-                    video_filters(
+                    ],
+                    [
                         form.cleaned_data["video_flip"],
                         form.cleaned_data["green_outlines"],
                         form.cleaned_data["frame_interpolation"],
@@ -226,8 +213,8 @@ async def conversion(request):
                         form.cleaned_data["video_saturation_boolean"],
                         form.cleaned_data["video_saturation_value"],
                         form.cleaned_data["video_lut"],
-                    ),
-                    audio_filters(
+                    ],
+                    [
                         form.cleaned_data["audio_volume"],
                         AUDIO_VOLUME_MIN,
                         AUDIO_VOLUME_MAX,
@@ -243,10 +230,21 @@ async def conversion(request):
                             form.cleaned_data["eq_ten_band_9"],
                             form.cleaned_data["eq_ten_band_10"],
                         ),
-                    ),
+                    ],
                 )
-            except (NotImplementedError, ValueError, TypeError):
-                return render(request, "error.html")
+            except (NotImplementedError, ValueError):
+                return render(
+                    request,
+                    "error.html",
+                    {"error": "We encountered an unexpected error"},
+                )
+
+            except InvalidVideoFileType:
+                return render(
+                    request,
+                    "error.html",
+                    {"error": "File is not a supported video file"},
+                )
         return render(
             request,
             "test.html",

@@ -6,11 +6,11 @@ html {
 
 body {
     font-family: 'Outfit', sans-serif;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    display: flex;
     min-height: 100vh;
-    flex-direction: column;
     margin: 0px;
     padding: 1.389rem;
     background-image: linear-gradient(to right bottom, #0f3841, #172d3a, #1b222f, #1b1922, #151015, #150d13, #150810, #15040c, #1d0815, #230c1d, #280e27, #2b1132);
@@ -53,7 +53,9 @@ select option {
 }
 
 .converter-container {
-    width: 70rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);

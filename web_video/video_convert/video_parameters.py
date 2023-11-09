@@ -1,5 +1,9 @@
 import ffmpeg, os
 from .google_cloud_storage import upload_cs_file, get_cs_file_url
+from .ffmpeg_exceptions import InvalidVideoFileType
+from .audio_parameters import check_audio_value
+from .video_filters import video_filters_list
+from .audio_filters import audio_filters_list
 
 video_extensions = (
     ".3g2",
@@ -49,19 +53,24 @@ video_extensions = (
 
 
 def local_video_save(filename: str, content) -> None:
-    with open(f"uploaded_videos/{filename}", "wb") as file:
-        for chunk in content.chunks():
-            file.write(chunk)
+    if isinstance(filename, str) == True:
+        with open(f"uploaded_videos/{filename}", "wb") as file:
+            for chunk in content.chunks():
+                file.write(chunk)
 
 
 def local_video_delete(filename: str) -> None:
-    if os.path.exists(filename):
-        os.remove(filename)
-    else:
-        print("The file does not exist")
+    if isinstance(filename, str) == True:
+        if os.path.exists(filename):
+            os.remove(filename)
+        else:
+            raise FileNotFoundError
 
 
 def check_video_resolution_widescreen(video_resolution: str) -> str:
+    """
+    Check video resolution
+    """
     match video_resolution:
         case "-1":
             return video_resolution
@@ -108,19 +117,51 @@ def check_video_value(
 
 def video_convert(
     input_name: str,
-    video_file,
-    video_resolution,
-    video_value,
-    video_preset,
-    audio_value,
-    video_filters,
-    audio_filters,
+    video_file: bytes,
+    video_resolution: int,
+    video_value_list: list,
+    video_preset: str,
+    audio_value_list: list,
+    video_filter_list: list,
+    audio_filter_list: list,
 ) -> None:
+    video_values = check_video_value(
+        video_value_list[0],
+        video_value_list[1],
+        video_value_list[2],
+        video_value_list[3],
+        video_value_list[4],
+        video_value_list[5],
+        video_value_list[6],
+    )
+    audio_value = check_audio_value(
+        audio_value_list[0], audio_value_list[1], audio_value_list[2]
+    )
+    video_filters = video_filters_list(
+        video_filter_list[0],
+        video_filter_list[1],
+        video_filter_list[2],
+        video_filter_list[3],
+        video_filter_list[4],
+        video_filter_list[5],
+        video_filter_list[6],
+        video_filter_list[7],
+        video_filter_list[8],
+        video_filter_list[9],
+        video_filter_list[10],
+    )
+    audio_filters = audio_filters_list(
+        audio_filter_list[0],
+        audio_filter_list[1],
+        audio_filter_list[2],
+        audio_filter_list[3],
+    )
+
     if input_name.endswith(video_extensions):
         local_video_save(f"{input_name}", video_file)
         input = ffmpeg.input(f"uploaded_videos/{input_name}")
     else:
-        raise TypeError
+        raise InvalidVideoFileType
 
     video_info = ffmpeg.probe(f"uploaded_videos/{input_name}")
     number_streams = len(video_info["streams"])
@@ -165,8 +206,8 @@ def video_convert(
             vcodec="h264_nvenc",
             pix_fmt="yuv420p",
             preset=video_preset,
-            rc=video_value[0],
-            **{video_value[1]: video_value[2]},
+            rc=video_values[0],
+            **{video_values[1]: video_values[2]},
             acodec="aac",
             audio_bitrate=audio_value,
         ).global_args("-hwaccel", "cuda", "-y").run()
@@ -182,8 +223,8 @@ def video_convert(
             vcodec="h264_nvenc",
             pix_fmt="yuv420p",
             preset=video_preset,
-            rc=video_value[0],
-            **{video_value[1]: video_value[2]},
+            rc=video_values[0],
+            **{video_values[1]: video_values[2]},
         ).global_args("-hwaccel", "cuda", "-y").run()
         upload_cs_file(
             "video_cloud_converter",

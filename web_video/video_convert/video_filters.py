@@ -21,7 +21,7 @@ def video_luts_list(lut_name: str) -> str:
     return f"LUT/{lut}"
 
 
-def video_filters(
+def video_filters_list(
     mirror: bool,
     green_outlines: bool,
     frame_interpolation: bool,
