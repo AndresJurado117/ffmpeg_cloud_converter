@@ -116,6 +116,7 @@ def check_video_value(
 
 
 def video_convert(
+    encoder_backend: str,
     input_name: str,
     video_file: bytes,
     video_resolution: int,
@@ -156,6 +157,13 @@ def video_convert(
         audio_filter_list[2],
         audio_filter_list[3],
     )
+
+    if encoder_backend == "GPU":
+        enc_backend = "h264_nvenc"
+        g_args = ("-hwaccel", "cuda", "-y")
+    if encoder_backend == "CPU":
+        enc_backend = "libx264"
+        g_args = ()
 
     if input_name.endswith(video_extensions):
         local_video_save(f"{input_name}", video_file)
@@ -203,30 +211,26 @@ def video_convert(
             video,
             audio,
             f"converted_videos/{input_name}_converted.mp4",
-            vcodec="h264_nvenc",
+            vcodec=enc_backend,
             pix_fmt="yuv420p",
             preset=video_preset,
             rc=video_values[0],
             **{video_values[1]: video_values[2]},
             acodec="aac",
             audio_bitrate=audio_value,
-        ).global_args("-hwaccel", "cuda", "-y").run()
-        upload_cs_file(
-            "video_cloud_converter",
-            f"converted_videos/{input_name}_converted.mp4",
-            f"converted_videos/{input_name}_converted",
-        )
+        ).global_args(g_args).run()
     else:
         ffmpeg.output(
             video,
             f"converted_videos/{input_name}_converted.mp4",
-            vcodec="h264_nvenc",
+            vcodec=enc_backend,
             pix_fmt="yuv420p",
             preset=video_preset,
             rc=video_values[0],
             **{video_values[1]: video_values[2]},
-        ).global_args("-hwaccel", "cuda", "-y").run()
-        upload_cs_file(
+        ).global_args(g_args).run() 
+
+    upload_cs_file(
             "video_cloud_converter",
             f"converted_videos/{input_name}_converted.mp4",
             f"converted_videos/{input_name}_converted",
@@ -236,3 +240,7 @@ def video_convert(
     return get_cs_file_url(
         "video_cloud_converter", f"converted_videos/{input_name}_converted"
     )
+
+def get_video_url_gcp(filename):
+    get_cs_file_url("video_cloud_converter",
+                    f"converted_videos/{filename}_converted",)
