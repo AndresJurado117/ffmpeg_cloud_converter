@@ -4,6 +4,11 @@ from .ffmpeg_exceptions import InvalidVideoFileType
 from .audio_parameters import check_audio_value
 from .video_filters import video_filters_list
 from .audio_filters import audio_filters_list
+from .local_video_management import local_video_save, local_video_delete
+
+ENCODER_MODE = "GPU"
+# Values for STORAGE_CONVERTED_VIDEOS are "LOCAL", "GCP", "AZURE", "AWS"
+STORAGE_CONVERTED_VIDEOS = "LOCAL"
 
 video_extensions = (
     ".3g2",
@@ -50,21 +55,6 @@ video_extensions = (
     ".wmv",
     ".yuv",
 )
-
-
-def local_video_save(filename: str, content) -> None:
-    if isinstance(filename, str) == True:
-        with open(f"uploaded_videos/{filename}", "wb") as file:
-            for chunk in content.chunks():
-                file.write(chunk)
-
-
-def local_video_delete(filename: str) -> None:
-    if isinstance(filename, str) == True:
-        if os.path.exists(filename):
-            os.remove(filename)
-        else:
-            raise FileNotFoundError
 
 
 def check_video_resolution_widescreen(video_resolution: str) -> str:
@@ -116,7 +106,6 @@ def check_video_value(
 
 
 def video_convert(
-    encoder_backend: str,
     input_name: str,
     video_file: bytes,
     video_resolution: int,
@@ -158,12 +147,13 @@ def video_convert(
         audio_filter_list[3],
     )
 
-    if encoder_backend == "GPU":
-        enc_backend = "h264_nvenc"
-        g_args = ("-hwaccel", "cuda", "-y")
-    if encoder_backend == "CPU":
-        enc_backend = "libx264"
-        g_args = ()
+    match ENCODER_MODE:
+        case "GPU":
+            enc_backend = "h264_nvenc"
+            g_args = ("-hwaccel", "cuda", "-y")
+        case "CPU":
+            enc_backend = "libx264"
+            g_args = ()
 
     if input_name.endswith(video_extensions):
         local_video_save(f"{input_name}", video_file)
@@ -230,16 +220,25 @@ def video_convert(
             **{video_values[1]: video_values[2]},
         ).global_args(g_args).run() 
 
-    upload_cs_file(
-            "video_cloud_converter",
-            f"converted_videos/{input_name}_converted.mp4",
-            f"converted_videos/{input_name}_converted",
-        )
-    # Delete a file
-    local_video_delete(f"uploaded_videos/{input_name}")
-    return get_cs_file_url(
-        "video_cloud_converter", f"converted_videos/{input_name}_converted"
-    )
+    match STORAGE_CONVERTED_VIDEOS:
+        case "LOCAL":
+            # Should return local file URL
+            pass
+        case "GPC":
+            upload_cs_file(
+                    "video_cloud_converter",
+                    f"converted_videos/{input_name}_converted.mp4",
+                    f"converted_videos/{input_name}_converted",
+                )
+            # Delete a file
+            local_video_delete(f"uploaded_videos/{input_name}")
+            return get_cs_file_url(
+                "video_cloud_converter", f"converted_videos/{input_name}_converted"
+            )
+        case "AZURE":
+            pass
+        case "AWS":
+            pass
 
 def get_video_url_gcp(filename):
     get_cs_file_url("video_cloud_converter",

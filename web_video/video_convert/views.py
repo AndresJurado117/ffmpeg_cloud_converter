@@ -179,7 +179,6 @@ def conversion(request):
         if form.is_valid():
             try:
                 video_convert(
-                    "GPU",
                     form.cleaned_data["input_file"].name,
                     request.FILES["input_file"],
                     form.cleaned_data["video_resolution"],
