@@ -7,6 +7,7 @@ from .audio_filters import audio_filters_list
 from .local_video_management import local_video_save, local_video_delete
 from .video_extensions import video_extensions
 
+# These keys should be ENV variables.
 # Values for ENCODER_MODE are "GPU", "CPU"
 ENCODER_MODE = "GPU"
 VIDEO_CODEC = None

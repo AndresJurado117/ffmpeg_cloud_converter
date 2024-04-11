@@ -125,6 +125,7 @@ button[type="submit"] {
 }
 
 #progressBar {
+    position: relative;
     width: 100%;
     background-color: #ddd;
     border-radius: 5px;
@@ -139,4 +140,10 @@ button[type="submit"] {
     color: #ffffff;
     text-align: center;
     line-height: 30px;
+}
+
+.whiteLogo {
+    margin: -30px -5px;
+    width: 130px;
+    height: 80px;
 }

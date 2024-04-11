@@ -1,4 +1,4 @@
-video_extensions = [
+video_extensions = (
     ".3g2",
     ".3gp",
     ".amv",
@@ -42,4 +42,4 @@ video_extensions = [
     ".webm",
     ".wmv",
     ".yuv",
-]
+)

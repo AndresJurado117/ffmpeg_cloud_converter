@@ -1,3 +1,10 @@
+window.addEventListener("popstate", function(event) {
+    console.log("Hello");
+    if (progressBar.style.display == "block") {
+        progressBar.style.display = "none";
+    }
+})
+
 document.addEventListener("DOMContentLoaded", (event) => {
     /*  Declare Video Mode and Sliders */
     const videoMode = document.getElementById("id_video_mode");
@@ -201,6 +208,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     convertBtn = document.getElementById("convertBtn");
     progressBar = document.getElementById("progressBar");
     loadingDots = document.getElementById("loadingDots");
+
     convertBtn.onclick = function() {
         // Check if an input file has been selected
         attachedFile = document.getElementById("id_input_file");

@@ -2,7 +2,7 @@ from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 import requests
-from .encoding_parameters import video_convert, get_video_url
+from .encoding_parameters import video_convert, get_video_url, ENCODER_MODE, AUDIO_CODEC, STORAGE_CONVERTED_VIDEOS
 from .ffmpeg_exceptions import InvalidVideoFileType
 from .video_extensions import video_extensions
 from itertools import chain
@@ -170,7 +170,7 @@ class ConvertVideo(forms.Form):
 
 
 def index(request):
-    return render(request, "index.html", {"form": ConvertVideo()})
+    return render(request, "index.html", {"form": ConvertVideo(), "encoderMode": ENCODER_MODE, "storageConvertedVideos": STORAGE_CONVERTED_VIDEOS})
 
 
 # Add check until video is encoded, for a queue.

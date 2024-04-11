@@ -159,8 +159,22 @@
                     </div>
                 </div>
             </div>
-            
-            <p>Powered by: Nvidia, Google.</p>
+            <p>Powered by:</p>
+            <div class="logos">
+                <img class="whiteLogo" src="{% static 'djangoLogoWhite.svg' %}">
+                {% if encoderMode == "GPU" %}
+                    <img class="whiteLogo" src="{% static 'nvidiaLogoWhite.svg' %}">
+                {% endif %}
+                {% if storageConvertedVideos == "LOCAL" %}
+                    <img class="whiteLogo" src="{% static 'linuxLogo.svg' %}">
+                {% elif storageConvertedVideos == "GCP" %}
+                    <img class="whiteLogo" src="{% static 'googleLogoWhite.svg' %}">
+                {% elif storageConvertedVideos == "AZURE" %}
+                    <img class="whiteLogo" src="{% static 'azureLogoWhite.svg' %}">
+                {% elif storageConvertedVideos == "AWS" %}
+                    <img class="whiteLogo" src="{% static 'amazonLogoWhite.svg' %}">
+                {% endif %}
+            </div>
         </div>
     </form>
 </div>
