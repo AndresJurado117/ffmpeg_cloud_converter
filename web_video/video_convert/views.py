@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 import requests
 from .encoding_parameters import video_convert, get_video_url
 from .ffmpeg_exceptions import InvalidVideoFileType
+from .video_extensions import video_extensions
+from itertools import chain
 
 # Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions as of driver version 551.23, it now supports 8 encoding sessions, apparently RTX A2000, A4000 can take around 26 sessions
 SIMULTANEOUS_TRANSCODING_SESSIONS = 5
@@ -41,7 +43,7 @@ class ConvertVideo(forms.Form):
     )
     nvidia_rate_control = ("qp", "QP"), ("vbr", "VBR")
 
-    input_file = forms.FileField(widget=forms.FileInput(attrs={"accept": "video/*"}))
+    input_file = forms.FileField(widget=forms.FileInput(attrs={"accept": ', '.join(video_extensions)}))
 
     video_resolution = forms.ChoiceField(choices=widescreen_resolutions)
 
