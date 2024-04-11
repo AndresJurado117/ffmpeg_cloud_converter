@@ -115,3 +115,28 @@ input[type="checkbox"]:checked {
     background: rgba(40,40,40,0.7);
     border: 2px solid gray;
 }
+
+button[type="submit"] {
+    width: 100%;
+}
+
+#convertBtn {
+    height: 30px;
+}
+
+#progressBar {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    display: none;
+}
+  
+#myBar {
+    width: 100%;
+    height: 30px;
+    background-color: #04AA6D;
+    border-radius: 5px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 30px;
+}

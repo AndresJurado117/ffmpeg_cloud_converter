@@ -2,8 +2,7 @@ from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 import requests
-from .video_parameters import video_convert, get_video_url_gcp
-from .google_cloud_storage import get_cs_file_url
+from .encoding_parameters import video_convert, get_video_url
 from .ffmpeg_exceptions import InvalidVideoFileType
 
 # Nvidia RTX 30/40 Series supports 5 simultaneous encoding sessions as of driver version 551.23, it now supports 8 encoding sessions, apparently RTX A2000, A4000 can take around 26 sessions
@@ -232,19 +231,19 @@ def conversion(request):
                 return render(
                     request,
                     "error.html",
-                    {"error": "We encountered an unexpected error"},
+                    {"error": "We encountered an unexpected error."},
                 )
 
             except InvalidVideoFileType:
                 return render(
                     request,
                     "error.html",
-                    {"error": "File is not a supported video file"},
+                    {"error": "File is not a supported video file."},
                 )
         return render(
             request,
             "test.html",
             {
-                "download_link": get_video_url_gcp(form.cleaned_data['input_file'])
+                "download_link": get_video_url(form.cleaned_data['input_file'])
             },
         )

@@ -196,4 +196,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
             equalizerValues(0, 0, 0, 0, 0, 0, 0, 2, 4, 4)
         }
     }
+
+    //Loading Bar
+    convertBtn = document.getElementById("convertBtn");
+    progressBar = document.getElementById("progressBar");
+    loadingDots = document.getElementById("loadingDots");
+    convertBtn.onclick = function() {
+        // Check if an input file has been selected
+        attachedFile = document.getElementById("id_input_file");
+        if (attachedFile.files.length == 1) {
+            console.log("File exists");
+            progressBar.style.display = "block";
+            convertBtn.style.display = "none";
+
+            var id = setInterval(frame, 1000);
+            function frame() {
+                if (loadingDots.innerHTML.length >= 3) {
+                    loadingDots.innerHTML = "";
+                }
+                else {
+                    loadingDots.innerHTML += ".";
+                }
+            }
+        }
+        else {
+            console.log("File does not exist");
+        }
+    }
 });

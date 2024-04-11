@@ -1,4 +1,4 @@
-import ffmpeg, os
+import ffmpeg
 from .google_cloud_storage import upload_cs_file, get_cs_file_url
 from .ffmpeg_exceptions import InvalidVideoFileType
 from .audio_parameters import check_audio_value
@@ -6,8 +6,11 @@ from .video_filters import video_filters_list
 from .audio_filters import audio_filters_list
 from .local_video_management import local_video_save, local_video_delete
 
+# Values for ENCODER_MODE are "GPU", "CPU"
 ENCODER_MODE = "GPU"
-# Values for STORAGE_CONVERTED_VIDEOS are "LOCAL", "GCP", "AZURE", "AWS"
+VIDEO_CODEC = None
+AUDIO_CODEC = "aac"
+# Values for STORAGE_CONVERTED_VIDEOS are "LOCAL", "GCP", "AZURE", "AWS", LOCAL will keep the converted files in the converted folder but won't return a download link on the web GUI, it will return None.
 STORAGE_CONVERTED_VIDEOS = "LOCAL"
 
 video_extensions = (
@@ -150,10 +153,10 @@ def video_convert(
     match ENCODER_MODE:
         case "GPU":
             enc_backend = "h264_nvenc"
-            g_args = ("-hwaccel", "cuda", "-y")
+            global_args = ["-hwaccel", "cuda", "-y"]
         case "CPU":
             enc_backend = "libx264"
-            g_args = ()
+            global_args = ("-y")
 
     if input_name.endswith(video_extensions):
         local_video_save(f"{input_name}", video_file)
@@ -206,9 +209,9 @@ def video_convert(
             preset=video_preset,
             rc=video_values[0],
             **{video_values[1]: video_values[2]},
-            acodec="aac",
+            acodec=AUDIO_CODEC,
             audio_bitrate=audio_value,
-        ).global_args(g_args).run()
+        ).global_args(*global_args).run() 
     else:
         ffmpeg.output(
             video,
@@ -218,11 +221,11 @@ def video_convert(
             preset=video_preset,
             rc=video_values[0],
             **{video_values[1]: video_values[2]},
-        ).global_args(g_args).run() 
+        ).global_args(*global_args).run() 
 
     match STORAGE_CONVERTED_VIDEOS:
         case "LOCAL":
-            # Should return local file URL
+            # Converted video is already saved locally
             pass
         case "GPC":
             upload_cs_file(
@@ -240,6 +243,14 @@ def video_convert(
         case "AWS":
             pass
 
-def get_video_url_gcp(filename):
-    get_cs_file_url("video_cloud_converter",
-                    f"converted_videos/{filename}_converted",)
+def get_video_url(filename):
+    match STORAGE_CONVERTED_VIDEOS:
+        case "LOCAL":
+            return None
+        case "GCP":
+            get_cs_file_url("video_cloud_converter",
+                            f"converted_videos/{filename}_converted",)
+        case "AZURE":
+            pass
+        case "AWS":
+            pass

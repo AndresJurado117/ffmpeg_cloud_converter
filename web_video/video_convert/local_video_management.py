@@ -13,3 +13,10 @@ def local_video_delete(filename: str) -> None:
             os.remove(filename)
         else:
             raise FileNotFoundError
+        
+def local_video_url(filename: str) -> None:
+    if isinstance(filename, str) == True:
+        if os.path.exists(filename):
+            file_path = f"converted_videos/{filename}"
+        else:
+            raise FileNotFoundError
