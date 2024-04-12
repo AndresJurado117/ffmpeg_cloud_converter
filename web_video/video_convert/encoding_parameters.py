@@ -6,14 +6,7 @@ from .video_filters import video_filters_list
 from .audio_filters import audio_filters_list
 from .local_video_management import local_video_save, local_video_delete
 from .video_extensions import video_extensions
-
-# These keys should be ENV variables.
-# Values for ENCODER_MODE are "GPU", "CPU"
-ENCODER_MODE = "GPU"
-VIDEO_CODEC = None
-AUDIO_CODEC = "aac"
-# Values for STORAGE_CONVERTED_VIDEOS are "LOCAL", "GCP", "AZURE", "AWS", LOCAL will keep the converted files in the converted folder but won't return a download link on the web GUI, it will return None.
-STORAGE_CONVERTED_VIDEOS = "LOCAL"
+from .global_variables import ENCODER_MODE, AUDIO_CODEC, STORAGE_CONVERTED_VIDEOS
 
 
 def check_video_resolution_widescreen(video_resolution: str) -> str:

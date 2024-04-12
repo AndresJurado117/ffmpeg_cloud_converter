@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .encoding_parameters import video_convert, get_video_url, ENCODER_MODE, STORAGE_CONVERTED_VIDEOS
+from .encoding_parameters import video_convert, get_video_url
 from .ffmpeg_exceptions import InvalidVideoFileType
 from .video_forms import ConvertVideo
-from .video_forms import VIDEO_QP_MIN, VIDEO_QP_MAX, VIDEO_QP_INITIAL, VIDEO_BITRATE_MIN, VIDEO_BITRATE_MAX, VIDEO_BITRATE_INITIAL, AUDIO_BITRATE_MIN, AUDIO_BITRATE_MAX, AUDIO_BITRATE_INITIAL, AUDIO_VOLUME_MIN, AUDIO_VOLUME_MAX, AUDIO_VOLUME_INITIAL
+from .global_variables import VIDEO_QP_MIN, VIDEO_QP_MAX, VIDEO_QP_INITIAL, VIDEO_BITRATE_MIN, VIDEO_BITRATE_MAX, AUDIO_BITRATE_MIN, AUDIO_BITRATE_MAX, AUDIO_VOLUME_MIN, AUDIO_VOLUME_MAX, AUDIO_VOLUME_INITIAL, ENCODER_MODE, STORAGE_CONVERTED_VIDEOS
 
 
 def index(request):
