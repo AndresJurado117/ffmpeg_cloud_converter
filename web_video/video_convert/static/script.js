@@ -1,12 +1,14 @@
-window.addEventListener("popstate", function(event) {
+// Reset frontend values when pressing back button
+
+window.addEventListener("popstate", function() {
     console.log("Hello");
     if (progressBar.style.display == "block") {
         progressBar.style.display = "none";
     }
 })
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    /*  Declare Video Mode and Sliders */
+document.addEventListener("DOMContentLoaded", () => {
+    //  Declare Video Mode and Sliders
     const videoMode = document.getElementById("id_video_mode");
     const qpSlider = document.getElementById("id_video_qp");
     const bitrateSlider = document.getElementById("id_video_bitrate");
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
-    /* QP Slider */
+    // QP Slider
 
     const qpValue = document.getElementById("qp_value");
 
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         qpValue.innerHTML = this.value;
     }
 
-    /* Video Bitrate Slider */
+    // Video Bitrate Slider
 
     const bitrateValue = document.getElementById("bitrate_value");
 
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         bitrateValue.innerHTML = this.value;
     }
 
-    /* Audio Bitrate Slider */
+    // Audio Bitrate Slider
 
     const audioSlider = document.getElementById("id_audio_bitrate");
     const audioValue = document.getElementById("audio_value");
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         audioValue.innerHTML = this.value;
     }
 
-    /* Brightness Slider */
+    // Brightness Slider
 
     const brightnessBoolean = document.getElementById("id_video_brightness_boolean");
     const brightnessSlider = document.getElementById("id_video_brightness_value");
@@ -74,7 +76,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         brightnessValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
-    /* Contrast Slider */
+    // Contrast Slider
 
     const contrastBoolean = document.getElementById("id_video_contrast_boolean")
     const contrastSlider = document.getElementById("id_video_contrast_value");
@@ -95,7 +97,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         contrastValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
-    /* Saturation Slider */
+    // Saturation Slider
 
     const saturationBoolean = document.getElementById("id_video_saturation_boolean")
     const saturationSlider = document.getElementById("id_video_saturation_value");
@@ -116,7 +118,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         saturationValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
-    /* Volumen Slider */
+    // Volumen Slider
 
     const volumeSlider = document.getElementById("id_audio_volume");
     const volumeValue = document.getElementById("volume_value");
@@ -127,7 +129,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         volumeValue.innerHTML = Math.round(this.value * 100);
     }
 
-    /* EQ Presets and Sliders */
+    // EQ Presets and Sliders
 
     const eqPresets = document.getElementById("id_equalizer_preset");
     
@@ -204,20 +206,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
-    //Loading Bar
-    convertBtn = document.getElementById("convertBtn");
-    progressBar = document.getElementById("progressBar");
-    loadingDots = document.getElementById("loadingDots");
+    // Loading Bar
+    const convertBtn = document.getElementById("convertBtn");
+    const progressBar = document.getElementById("progressBar");
+    const loadingDots = document.getElementById("loadingDots");
 
     convertBtn.onclick = function() {
         // Check if an input file has been selected
-        attachedFile = document.getElementById("id_input_file");
+        const attachedFile = document.getElementById("id_input_file");
         if (attachedFile.files.length == 1) {
-            console.log("File exists");
             progressBar.style.display = "block";
             convertBtn.style.display = "none";
 
-            var id = setInterval(frame, 1000);
+            const id = setInterval(frame, 1000);
             function frame() {
                 if (loadingDots.innerHTML.length >= 3) {
                     loadingDots.innerHTML = "";
