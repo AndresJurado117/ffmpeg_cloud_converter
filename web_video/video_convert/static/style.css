@@ -120,11 +120,11 @@ button[type="submit"] {
     width: 100%;
 }
 
-#convertBtn {
+#convert_btn {
     height: 30px;
 }
 
-#progressBar {
+#progress_bar {
     position: relative;
     width: 100%;
     background-color: #ddd;
@@ -132,7 +132,7 @@ button[type="submit"] {
     display: none;
 }
   
-#myBar {
+#my_bar {
     width: 100%;
     height: 30px;
     background-color: #04AA6D;
@@ -142,7 +142,7 @@ button[type="submit"] {
     line-height: 30px;
 }
 
-.whiteLogo {
+.white_logo {
     margin: -30px -5px;
     width: 130px;
     height: 80px;

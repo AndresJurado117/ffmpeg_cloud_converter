@@ -152,27 +152,27 @@
                 </div>
             </div>
             <div>
-                <button type="submit" id="convertBtn">Convert Video</button>
-                <div id="progressBar">
-                    <div id="myBar">
-                        <span>Converting video. Please wait</span><span id="loadingDots"></span>
+                <button type="submit" id="convert_btn">Convert Video</button>
+                <div id="progress_bar">
+                    <div id="my_bar">
+                        <span>Converting video. Please wait</span><span id="loading_dots"></span>
                     </div>
                 </div>
             </div>
             <p>Powered by:</p>
             <div class="logos">
-                <img class="whiteLogo" src="{% static 'djangoLogoWhite.svg' %}">
+                <img class="white_logo" src="{% static 'djangoLogoWhite.svg' %}">
                 {% if encoderMode == "GPU" %}
-                    <img class="whiteLogo" src="{% static 'nvidiaLogoWhite.svg' %}">
+                    <img class="white_logo" src="{% static 'nvidiaLogoWhite.svg' %}">
                 {% endif %}
                 {% if storageConvertedVideos == "LOCAL" %}
-                    <img class="whiteLogo" src="{% static 'linuxLogo.svg' %}">
+                    <img class="white_logo" src="{% static 'linuxLogo.svg' %}">
                 {% elif storageConvertedVideos == "GCP" %}
-                    <img class="whiteLogo" src="{% static 'googleLogoWhite.svg' %}">
+                    <img class="white_logo" src="{% static 'googleLogoWhite.svg' %}">
                 {% elif storageConvertedVideos == "AZURE" %}
-                    <img class="whiteLogo" src="{% static 'azureLogoWhite.svg' %}">
+                    <img class="white_logo" src="{% static 'azureLogoWhite.svg' %}">
                 {% elif storageConvertedVideos == "AWS" %}
-                    <img class="whiteLogo" src="{% static 'amazonLogoWhite.svg' %}">
+                    <img class="white_logo" src="{% static 'amazonLogoWhite.svg' %}">
                 {% endif %}
             </div>
         </div>

@@ -1,6 +1,7 @@
 // Reset frontend values when pressing back button
 
 window.addEventListener("popstate", function() {
+    const progressBar = document.getElementById("progress_bar");
     console.log("Hello");
     if (progressBar.style.display == "block") {
         progressBar.style.display = "none";
@@ -207,9 +208,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Loading Bar
-    const convertBtn = document.getElementById("convertBtn");
-    const progressBar = document.getElementById("progressBar");
-    const loadingDots = document.getElementById("loadingDots");
+    const convertBtn = document.getElementById("convert_btn");
+    const progressBar = document.getElementById("progress_bar");
+    const loadingDots = document.getElementById("loading_dots");
 
     convertBtn.onclick = function() {
         // Check if an input file has been selected
