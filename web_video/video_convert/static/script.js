@@ -1,20 +1,21 @@
-// Reset frontend values when pressing back button
-
-window.addEventListener("popstate", function() {
-    const progressBar = document.getElementById("progress_bar");
-    console.log("Hello");
-    if (progressBar.style.display == "block") {
-        progressBar.style.display = "none";
-    }
-})
-
 document.addEventListener("DOMContentLoaded", () => {
+
+    // Reset frontend values when pressing back button
+
+    window.addEventListener("popstate", () => {
+        const progressBar = document.getElementById("progress_bar");
+        console.log("Hello");
+        if (progressBar.style.display == "block") {
+            progressBar.style.display = "none";
+        };
+    });
+    
     //  Declare Video Mode and Sliders
     const videoMode = document.getElementById("id_video_mode");
     const qpSlider = document.getElementById("id_video_qp");
     const bitrateSlider = document.getElementById("id_video_bitrate");
 
-    videoMode.onchange = function () {
+    videoMode.onchange = () => {
         if (this.value == "qp") {
             qpSlider.disabled = false;
             bitrateSlider.disabled = true;
@@ -22,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (this.value == "vbr") {
             qpSlider.disabled = true;
             bitrateSlider.disabled = false;
-        }
-    }
+        };
+    };
 
     // QP Slider
 
@@ -31,9 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     qpValue.innerHTML = qpSlider.value;
 
-    qpSlider.oninput = function () {
+    qpSlider.oninput = () => {
         qpValue.innerHTML = this.value;
-    }
+    };
 
     // Video Bitrate Slider
 
@@ -41,9 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     bitrateValue.innerHTML = bitrateSlider.value;
 
-    bitrateSlider.oninput = function () {
+    bitrateSlider.oninput = () => {
         bitrateValue.innerHTML = this.value;
-    }
+    };
 
     // Audio Bitrate Slider
 
@@ -52,9 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     audioValue.innerHTML = audioSlider.value;
 
-    audioSlider.oninput = function () {
+    audioSlider.oninput = () => { 
         audioValue.innerHTML = this.value;
-    }
+    };
 
     // Brightness Slider
 
@@ -62,60 +63,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const brightnessSlider = document.getElementById("id_video_brightness_value");
     const brightnessValue = document.getElementById("brightness_value");
 
-    brightnessBoolean.onclick = function () {
+    brightnessBoolean.onclick = () => {
         if (brightnessSlider.disabled == true) {
             brightnessSlider.disabled = false;
         }
         else {
             brightnessSlider.disabled = true;
-        }
-    }
+        };
+    };
 
     brightnessValue.innerHTML = parseFloat(brightnessSlider.value).toFixed(2);
 
-    brightnessSlider.oninput = function () {
+    brightnessSlider.oninput = () => {
         brightnessValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
     // Contrast Slider
 
-    const contrastBoolean = document.getElementById("id_video_contrast_boolean")
+    const contrastBoolean = document.getElementById("id_video_contrast_boolean");
     const contrastSlider = document.getElementById("id_video_contrast_value");
     const contrastValue = document.getElementById("contrast_value");
 
-    contrastBoolean.onclick = function () {
+    contrastBoolean.onclick = ()  => {
         if (contrastSlider.disabled == true) {
             contrastSlider.disabled = false;
         }
         else {
             contrastSlider.disabled = true;
-        }
-    }
+        };
+    };
 
     contrastValue.innerHTML = parseFloat(contrastSlider.value).toFixed(2);
 
-    contrastSlider.oninput = function () {
+    contrastSlider.oninput = () => {
         contrastValue.innerHTML = parseFloat(this.value).toFixed(2);
-    }
+    };
 
     // Saturation Slider
 
-    const saturationBoolean = document.getElementById("id_video_saturation_boolean")
+    const saturationBoolean = document.getElementById("id_video_saturation_boolean");
     const saturationSlider = document.getElementById("id_video_saturation_value");
     const saturationValue = document.getElementById("saturation_value");
 
-    saturationBoolean.onclick = function () {
+    saturationBoolean.onclick = () => {
         if (saturationSlider.disabled == true) {
             saturationSlider.disabled = false;
         }
         else {
             saturationSlider.disabled = true;
-        }
-    }
+        };
+    };
 
     saturationValue.innerHTML = parseFloat(saturationSlider.value).toFixed(2);
 
-    saturationSlider.oninput = function () {
+    saturationSlider.oninput = () => {
         saturationValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
@@ -126,9 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     volumeValue.innerHTML = Math.round(volumeSlider.value * 100);
 
-    volumeSlider.oninput = function () {
+    volumeSlider.oninput = () => {
         volumeValue.innerHTML = Math.round(this.value * 100);
-    }
+    };
 
     // EQ Presets and Sliders
 
@@ -140,11 +141,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         sliderVal.innerHTML = slider.value;
 
-        slider.oninput = function () {
+        slider.oninput = () => {
             sliderVal.innerHTML = this.value;
             eqPresets.value = "custom";
-        }
-    }
+        };
+    };
 
     barSliderFunction("id_eq_ten_band_1", "eq_bar_1");
     barSliderFunction("id_eq_ten_band_2", "eq_bar_2");
@@ -168,9 +169,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("id_eq_ten_band_8").value = document.getElementById("eq_bar_8").value = document.getElementById("eq_bar_8").innerHTML = bandEight;
         document.getElementById("id_eq_ten_band_9").value = document.getElementById("eq_bar_9").value = document.getElementById("eq_bar_9").innerHTML = bandNine;
         document.getElementById("id_eq_ten_band_10").value = document.getElementById("eq_bar_10").value = document.getElementById("eq_bar_10").innerHTML = bandTen;
-    }
+    };
 
-    eqPresets.onchange = function () {
+    eqPresets.onchange = () => {
         /*
         switch (this.value) {
             case "eq_hi_end":
@@ -204,20 +205,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         else if (this.value == "eq_music_top_end_boost") {
             equalizerValues(0, 0, 0, 0, 0, 0, 0, 2, 4, 4)
-        }
-    }
+        };
+    };
 
     // Loading Bar
     const convertBtn = document.getElementById("convert_btn");
     const progressBar = document.getElementById("progress_bar");
     const loadingDots = document.getElementById("loading_dots");
 
-    convertBtn.onclick = function() {
+    convertBtn.onclick = () => {
         // Check if an input file has been selected
         const attachedFile = document.getElementById("id_input_file");
         if (attachedFile.files.length == 1) {
             progressBar.style.display = "block";
             convertBtn.style.display = "none";
+            /*
+            Should disable buttons after sending values to backend
+            videoMode.disabled = true;
+            qpSlider.disabled = true;
+            */
 
             const id = setInterval(frame, 1000);
             function frame() {
@@ -227,10 +233,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 else {
                     loadingDots.innerHTML += ".";
                 }
-            }
+            };
         }
         else {
             console.log("File does not exist");
         }
-    }
+    };
 });
