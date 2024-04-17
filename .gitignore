@@ -5,4 +5,5 @@ video_convert/__pycache__/
 web_video/__pycache__/
 
 .env
+.venv
 google-storage.json

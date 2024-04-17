@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Video Encoder - Success
+{% endblock %}
+
+{% block body %}
+
+<div class="converter-container">
+    <p>Your video has been converted.</p>
+    <a href="{{ download_link }}">Download Link</a>
+    <a href="{% url 'index' %}">Convert another video</a>
+</div>
+{% endblock %}
