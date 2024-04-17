@@ -1,21 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    // Reset frontend values when pressing back button
-
-    window.addEventListener("popstate", () => {
-        const progressBar = document.getElementById("progress_bar");
-        console.log("Hello");
-        if (progressBar.style.display == "block") {
-            progressBar.style.display = "none";
-        };
-    });
     
     //  Declare Video Mode and Sliders
     const videoMode = document.getElementById("id_video_mode");
     const qpSlider = document.getElementById("id_video_qp");
     const bitrateSlider = document.getElementById("id_video_bitrate");
 
-    videoMode.onchange = () => {
+    videoMode.onchange = function() {
         if (this.value == "qp") {
             qpSlider.disabled = false;
             bitrateSlider.disabled = true;
@@ -42,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     bitrateValue.innerHTML = bitrateSlider.value;
 
-    bitrateSlider.oninput = () => {
+    bitrateSlider.oninput = function() {
         bitrateValue.innerHTML = this.value;
     };
 
@@ -53,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     audioValue.innerHTML = audioSlider.value;
 
-    audioSlider.oninput = () => { 
+    audioSlider.oninput = function() { 
         audioValue.innerHTML = this.value;
     };
 
@@ -63,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const brightnessSlider = document.getElementById("id_video_brightness_value");
     const brightnessValue = document.getElementById("brightness_value");
 
-    brightnessBoolean.onclick = () => {
+    brightnessBoolean.onclick = function() {
         if (brightnessSlider.disabled == true) {
             brightnessSlider.disabled = false;
         }
@@ -74,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     brightnessValue.innerHTML = parseFloat(brightnessSlider.value).toFixed(2);
 
-    brightnessSlider.oninput = () => {
+    brightnessSlider.oninput = function() {
         brightnessValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
@@ -84,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const contrastSlider = document.getElementById("id_video_contrast_value");
     const contrastValue = document.getElementById("contrast_value");
 
-    contrastBoolean.onclick = ()  => {
+    contrastBoolean.onclick = function() {
         if (contrastSlider.disabled == true) {
             contrastSlider.disabled = false;
         }
@@ -95,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     contrastValue.innerHTML = parseFloat(contrastSlider.value).toFixed(2);
 
-    contrastSlider.oninput = () => {
+    contrastSlider.oninput = function() {
         contrastValue.innerHTML = parseFloat(this.value).toFixed(2);
     };
 
@@ -105,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const saturationSlider = document.getElementById("id_video_saturation_value");
     const saturationValue = document.getElementById("saturation_value");
 
-    saturationBoolean.onclick = () => {
+    saturationBoolean.onclick = function() {
         if (saturationSlider.disabled == true) {
             saturationSlider.disabled = false;
         }
@@ -116,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     saturationValue.innerHTML = parseFloat(saturationSlider.value).toFixed(2);
 
-    saturationSlider.oninput = () => {
+    saturationSlider.oninput = function() {
         saturationValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
@@ -127,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     volumeValue.innerHTML = Math.round(volumeSlider.value * 100);
 
-    volumeSlider.oninput = () => {
+    volumeSlider.oninput = function() {
         volumeValue.innerHTML = Math.round(this.value * 100);
     };
 
@@ -141,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         sliderVal.innerHTML = slider.value;
 
-        slider.oninput = () => {
+        slider.oninput = function() {
             sliderVal.innerHTML = this.value;
             eqPresets.value = "custom";
         };
@@ -171,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("id_eq_ten_band_10").value = document.getElementById("eq_bar_10").value = document.getElementById("eq_bar_10").innerHTML = bandTen;
     };
 
-    eqPresets.onchange = () => {
+    eqPresets.onchange = function() {
         /*
         switch (this.value) {
             case "eq_hi_end":
@@ -213,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.getElementById("progress_bar");
     const loadingDots = document.getElementById("loading_dots");
 
-    convertBtn.onclick = () => {
+    convertBtn.onclick = function() {
         // Check if an input file has been selected
         const attachedFile = document.getElementById("id_input_file");
         if (attachedFile.files.length == 1) {
