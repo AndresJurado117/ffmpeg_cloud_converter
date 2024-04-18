@@ -7,7 +7,7 @@
 {% block body %}
 
 <div>
-    <form action="{% url 'conversion' %}" method="post" enctype="multipart/form-data">
+    <form id="form-video-convert" action="{% url 'conversion' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="converter-container">
             <h1>Cloud Video Encoder</h1>

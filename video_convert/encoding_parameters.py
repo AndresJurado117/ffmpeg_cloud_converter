@@ -1,5 +1,5 @@
 import ffmpeg
-from .google_cloud_storage import upload_cs_file, get_cs_file_url
+from .storage_google_cloud import upload_cs_file, get_cs_file_url
 from .ffmpeg_exceptions import InvalidVideoFileType
 from .audio_parameters import check_audio_value
 from .video_filters import video_filters_list

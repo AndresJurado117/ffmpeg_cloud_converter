@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     qpValue.innerHTML = qpSlider.value;
 
-    qpSlider.oninput = () => {
+    qpSlider.oninput = function() {
         qpValue.innerHTML = this.value;
     };
 
@@ -203,14 +203,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.getElementById("progress_bar");
     const loadingDots = document.getElementById("loading_dots");
 
-    convertBtn.onclick = function() {
-        // Check if an input file has been selected
+    form = document.getElementById("form-video-convert");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
         const attachedFile = document.getElementById("id_input_file");
+
         if (attachedFile.files.length == 1) {
             progressBar.style.display = "block";
             convertBtn.style.display = "none";
             
-            const id = setInterval(frame, 1000);
+            const id = setInterval(frame, 500);
             function frame() {
                 if (loadingDots.innerHTML.length >= 3) {
                     loadingDots.innerHTML = "";
@@ -223,5 +227,44 @@ document.addEventListener("DOMContentLoaded", () => {
         else {
             console.log("File does not exist");
         }
-    };
+
+        const formData = new FormData(form);
+        fetch("/conversion/", {
+            method: "POST",
+            body: formData
+        })
+        .then(videoMode.disabled=true, qpSlider.disabled=true, bitrateSlider.disabled=true, audioSlider.disabled=true, brightnessBoolean.disabled=true, brightnessSlider.disabled=true)
+        .then(response => response.json())
+        .then(function() {
+            window.location = "/conversion/", {
+                method: "GET",
+                data: {
+                    videoName: document.getElementById("id_input_file").value.replace("C:\\fakepath\\","")
+                }
+            }
+        })
+    })
+
+    /*
+    convertBtn.onclick = function() {
+        // Check if an input file has been selected
+        const attachedFile = document.getElementById("id_input_file");
+        if (attachedFile.files.length == 1) {
+            progressBar.style.display = "block";
+            convertBtn.style.display = "none";
+            
+            const id = setInterval(frame, 500);
+            function frame() {
+                if (loadingDots.innerHTML.length >= 3) {
+                    loadingDots.innerHTML = "";
+                }
+                else {
+                    loadingDots.innerHTML += ".";
+                }
+            };
+        }
+        else {
+            console.log("File does not exist");
+        }
+    }*/
 });

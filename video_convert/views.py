@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from .encoding_parameters import video_convert, get_video_url
 from .ffmpeg_exceptions import InvalidVideoFileType
 from .video_forms import ConvertVideo
@@ -78,6 +79,20 @@ def conversion(request):
                     "error.html",
                     {"error": "File is not a supported video file."},
                 )
+        print(form.cleaned_data['input_file'])
+        return JsonResponse({"message": "Video successfully converted. Redirecting to download page."})
+    
+    elif request.method == "GET":
+        videoFile = request.GET.get("videoName")
+        return render(
+            request,
+            "test.html",
+            {
+                "download_link": get_video_url(videoFile)
+            },
+        )
+    
+    else:
         return render(
             request,
             "test.html",
