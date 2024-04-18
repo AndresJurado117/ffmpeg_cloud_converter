@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     //  Declare Video Mode and Sliders
+    const videoResolution = document.getElementById("id_video_resolution");
     const videoMode = document.getElementById("id_video_mode");
     const qpSlider = document.getElementById("id_video_qp");
     const bitrateSlider = document.getElementById("id_video_bitrate");
@@ -46,6 +47,18 @@ document.addEventListener("DOMContentLoaded", () => {
     audioSlider.oninput = function() { 
         audioValue.innerHTML = this.value;
     };
+
+    // Video Preset Select
+
+    const videoPresetSelect = document.getElementById("id_video_preset");
+
+    // Video Filters
+
+    const vFMirrorBoolean = document.getElementById("id_video_flip");
+    const vfGreenOutlinesBoolean = document.getElementById("id_green_outlines");
+    const vfFrameInterpolationBoolean = document.getElementById("id_frame_interpolation");
+    const vfGaussianBlurBoolean = document.getElementById("id_gaussian_blur");
+    
 
     // Brightness Slider
 
@@ -110,7 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
         saturationValue.innerHTML = parseFloat(this.value).toFixed(2);
     }
 
-    // Volumen Slider
+    // LUT
+
+    const lutSelect = document.getElementById("id_video_lut");
+
+    // Volume Slider
 
     const volumeSlider = document.getElementById("id_audio_volume");
     const volumeValue = document.getElementById("volume_value");
@@ -123,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // EQ Presets and Sliders
 
-    const eqPresets = document.getElementById("id_equalizer_preset");
+    const eqPresetsSelect = document.getElementById("id_equalizer_preset");
     
     const barSliderFunction = (sliderBar, sliderValue) => {
         let slider = document.getElementById(sliderBar);
@@ -133,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         slider.oninput = function() {
             sliderVal.innerHTML = this.value;
-            eqPresets.value = "custom";
+            eqPresetsSelect.value = "custom";
         };
     };
 
@@ -161,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("id_eq_ten_band_10").value = document.getElementById("eq_bar_10").value = document.getElementById("eq_bar_10").innerHTML = bandTen;
     };
 
-    eqPresets.onchange = function() {
+    eqPresetsSelect.onchange = function() {
         /*
         switch (this.value) {
             case "eq_hi_end":
@@ -233,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             body: formData
         })
-        .then(videoMode.disabled=true, qpSlider.disabled=true, bitrateSlider.disabled=true, audioSlider.disabled=true, brightnessBoolean.disabled=true, brightnessSlider.disabled=true)
+        .then(videoResolution.disabled=true, videoMode.disabled=true, qpSlider.disabled=true, bitrateSlider.disabled=true, audioSlider.disabled=true, videoPresetSelect.disabled=true, brightnessBoolean.disabled=true, vFMirrorBoolean.disabled=true, vfGreenOutlinesBoolean.disabled=true, vfFrameInterpolationBoolean.disabled=true, vfGaussianBlurBoolean.disabled=true, brightnessSlider.disabled=true, contrastSlider.disabled=true, saturationSlider.disabled=true, lutSelect.disabled=true, volumeSlider.disabled=true, eqPresetsSelect.disabled=true)
         .then(response => response.json())
         .then(function() {
             window.location = "/conversion/", {
