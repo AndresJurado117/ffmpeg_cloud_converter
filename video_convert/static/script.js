@@ -165,17 +165,28 @@ document.addEventListener("DOMContentLoaded", () => {
     barSliderFunction("id_eq_ten_band_9", "eq_bar_9");
     barSliderFunction("id_eq_ten_band_10", "eq_bar_10");
 
+    const tenBand1 = document.getElementById("id_eq_ten_band_1");
+    const tenBand2 = document.getElementById("id_eq_ten_band_2");
+    const tenBand3 = document.getElementById("id_eq_ten_band_3");
+    const tenBand4 = document.getElementById("id_eq_ten_band_4");
+    const tenBand5 = document.getElementById("id_eq_ten_band_5");
+    const tenBand6 = document.getElementById("id_eq_ten_band_6");
+    const tenBand7 = document.getElementById("id_eq_ten_band_7");
+    const tenBand8 = document.getElementById("id_eq_ten_band_8");
+    const tenBand9 = document.getElementById("id_eq_ten_band_9");
+    const tenBand10 = document.getElementById("id_eq_ten_band_10");
+
     const equalizerValues = (bandOne, bandTwo, bandThree, bandFour, bandFive, bandSix, bandSeven, bandEight, bandNine, bandTen) => {
-        document.getElementById("id_eq_ten_band_1").value = document.getElementById("eq_bar_1").value = document.getElementById("eq_bar_1").innerHTML = bandOne;
-        document.getElementById("id_eq_ten_band_2").value = document.getElementById("eq_bar_2").value = document.getElementById("eq_bar_2").innerHTML = bandTwo;
-        document.getElementById("id_eq_ten_band_3").value = document.getElementById("eq_bar_3").value = document.getElementById("eq_bar_3").innerHTML = bandThree;
-        document.getElementById("id_eq_ten_band_4").value = document.getElementById("eq_bar_4").value = document.getElementById("eq_bar_4").innerHTML = bandFour;
-        document.getElementById("id_eq_ten_band_5").value = document.getElementById("eq_bar_5").value = document.getElementById("eq_bar_5").innerHTML = bandFive;
-        document.getElementById("id_eq_ten_band_6").value = document.getElementById("eq_bar_6").value = document.getElementById("eq_bar_6").innerHTML = bandSix;
-        document.getElementById("id_eq_ten_band_7").value = document.getElementById("eq_bar_7").value = document.getElementById("eq_bar_7").innerHTML = bandSeven;
-        document.getElementById("id_eq_ten_band_8").value = document.getElementById("eq_bar_8").value = document.getElementById("eq_bar_8").innerHTML = bandEight;
-        document.getElementById("id_eq_ten_band_9").value = document.getElementById("eq_bar_9").value = document.getElementById("eq_bar_9").innerHTML = bandNine;
-        document.getElementById("id_eq_ten_band_10").value = document.getElementById("eq_bar_10").value = document.getElementById("eq_bar_10").innerHTML = bandTen;
+        tenBand1.value = document.getElementById("eq_bar_1").value = document.getElementById("eq_bar_1").innerHTML = bandOne;
+        tenBand2.value = document.getElementById("eq_bar_2").value = document.getElementById("eq_bar_2").innerHTML = bandTwo;
+        tenBand3.value = document.getElementById("eq_bar_3").value = document.getElementById("eq_bar_3").innerHTML = bandThree;
+        tenBand4.value = document.getElementById("eq_bar_4").value = document.getElementById("eq_bar_4").innerHTML = bandFour;
+        tenBand5.value = document.getElementById("eq_bar_5").value = document.getElementById("eq_bar_5").innerHTML = bandFive;
+        tenBand6.value = document.getElementById("eq_bar_6").value = document.getElementById("eq_bar_6").innerHTML = bandSix;
+        tenBand7.value = document.getElementById("eq_bar_7").value = document.getElementById("eq_bar_7").innerHTML = bandSeven;
+        tenBand8.value = document.getElementById("eq_bar_8").value = document.getElementById("eq_bar_8").innerHTML = bandEight;
+        tenBand9.value = document.getElementById("eq_bar_9").value = document.getElementById("eq_bar_9").innerHTML = bandNine;
+        tenBand10.value = document.getElementById("eq_bar_10").value = document.getElementById("eq_bar_10").innerHTML = bandTen;
     };
 
     eqPresetsSelect.onchange = function() {
@@ -250,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             body: formData
         })
-        .then(videoResolution.disabled=true, videoMode.disabled=true, qpSlider.disabled=true, bitrateSlider.disabled=true, audioSlider.disabled=true, videoPresetSelect.disabled=true, brightnessBoolean.disabled=true, vFMirrorBoolean.disabled=true, vfGreenOutlinesBoolean.disabled=true, vfFrameInterpolationBoolean.disabled=true, vfGaussianBlurBoolean.disabled=true, brightnessSlider.disabled=true, contrastSlider.disabled=true, saturationSlider.disabled=true, lutSelect.disabled=true, volumeSlider.disabled=true, eqPresetsSelect.disabled=true)
+        .then(videoResolution.disabled=true, videoMode.disabled=true, qpSlider.disabled=true, bitrateSlider.disabled=true, audioSlider.disabled=true, videoPresetSelect.disabled=true, brightnessBoolean.disabled=true, vFMirrorBoolean.disabled=true, vfGreenOutlinesBoolean.disabled=true, vfFrameInterpolationBoolean.disabled=true, vfGaussianBlurBoolean.disabled=true, brightnessSlider.disabled=true, contrastSlider.disabled=true, saturationSlider.disabled=true, lutSelect.disabled=true, volumeSlider.disabled=true, eqPresetsSelect.disabled=true, tenBand1.disabled=true, tenBand2.disabled=true, tenBand3.disabled=true, tenBand4.disabled=true, tenBand5.disabled=true, tenBand6.disabled=true, tenBand7.disabled=true, tenBand8.disabled=true, tenBand9.disabled=true, tenBand10.disabled=true)
         .then(response => response.json())
         .then(function() {
             window.location = "/conversion/", {
@@ -261,27 +272,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
     })
-
-    /*
-    convertBtn.onclick = function() {
-        // Check if an input file has been selected
-        const attachedFile = document.getElementById("id_input_file");
-        if (attachedFile.files.length == 1) {
-            progressBar.style.display = "block";
-            convertBtn.style.display = "none";
-            
-            const id = setInterval(frame, 500);
-            function frame() {
-                if (loadingDots.innerHTML.length >= 3) {
-                    loadingDots.innerHTML = "";
-                }
-                else {
-                    loadingDots.innerHTML += ".";
-                }
-            };
-        }
-        else {
-            console.log("File does not exist");
-        }
-    }*/
 });
