@@ -271,5 +271,37 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         })
+
+        window.addEventListener("pageshow", () => {
+            videoResolution.disabled = false;
+            videoMode.disabled = false;
+            qpSlider.disabled = false;
+            bitrateSlider.disabled = false;
+            audioSlider.disabled = false;
+            videoPresetSelect.disabled=false;
+            brightnessBoolean.disabled=false;
+            vFMirrorBoolean.disabled=false;
+            vfGreenOutlinesBoolean.disabled=false;
+            vfFrameInterpolationBoolean.disabled=false;
+            vfGaussianBlurBoolean.disabled=false;
+            brightnessSlider.disabled=false;
+            contrastSlider.disabled=false;
+            saturationSlider.disabled=false;
+            lutSelect.disabled=false;
+            volumeSlider.disabled=false;
+            eqPresetsSelect.disabled=false;
+            tenBand1.disabled=false;
+            tenBand2.disabled=false;
+            tenBand3.disabled=false;
+            tenBand4.disabled=false;
+            tenBand5.disabled=false;
+            tenBand6.disabled=false;
+            tenBand7.disabled=false;
+            tenBand8.disabled=false;
+            tenBand9.disabled=false;
+            tenBand10.disabled=false;
+            progressBar.style.display = "none";
+            convertBtn.style.display = "block";
+        });
     })
 });
