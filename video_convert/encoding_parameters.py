@@ -175,7 +175,7 @@ def video_convert(
     match STORAGE_CONVERTED_VIDEOS:
         case "LOCAL":
             # Converted video is already saved locally
-            pass
+            print("Video is stored in the local storage.")
         case "GPC":
             upload_cs_file(
                     "video_cloud_converter",
@@ -188,18 +188,18 @@ def video_convert(
                 "video_cloud_converter", f"converted_videos/{input_name}_converted"
             )
         case "AZURE":
-            pass
+            raise NotImplementedError
         case "AWS":
-            pass
+            raise NotImplementedError
 
 def get_video_url(filename):
     match STORAGE_CONVERTED_VIDEOS:
         case "LOCAL":
-            return None
+            print("Video is stored in the local storage.")
         case "GCP":
             get_cs_file_url("video_cloud_converter",
                             f"converted_videos/{filename}_converted",)
         case "AZURE":
-            pass
+            raise NotImplementedError
         case "AWS":
-            pass
+            raise NotImplementedError
